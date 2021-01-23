@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/page-2', 'Page2Controller')->name('page-2');
 Route::get('/', 'HomeController')->name('home');
+
+
+Route::resource('usuarios', UsuarioController::class);
