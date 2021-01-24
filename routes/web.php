@@ -14,8 +14,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// verificacion de ruteo en caso que un usuario este logueado o no 
+Route::get('/', function () {
+
+    if(Auth::check())
+    {
+        // return redirect()->guest('escogerPerfil');
+        return redirect()->guest('/home');
+    }else{
+        return redirect()->guest('login');
+    }
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Usuarios autenticados
+|--------------------------------------------------------------------------
+|
+*/
+
 Route::get('/page-2', 'Page2Controller')->name('page-2');
-Route::get('/', 'HomeController')->name('home');
+// Route::get('/', 'HomeController')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::resource('usuarios', UsuarioController::class);
+Auth::routes();
+
+// Route::get('/', 'HomeController@index')->name('home');
+
+// Route::get('reset-password/{key}', 'UsuarioController@resetPassword');
+
+
+// Route::get('login', [
+//     'as' => 'login', 
+//     'uses' => 'Auth\LoginController@login'
+// ]);
+
+// Route::post('auth/login', [
+//     'as' =>'login', 
+//     'uses' => 'Auth\LoginController@postLogin'
+// ]);
