@@ -20,8 +20,8 @@ Route::get('/', function () {
 
     if(Auth::check())
     {
-        // return redirect()->guest('escogerPerfil');
-        return redirect()->guest('/home');
+        return redirect()->guest('escogerPerfil');
+        // return redirect()->guest('/home');
     }else{
         return redirect()->guest('login');
     }
@@ -45,7 +45,15 @@ Auth::routes();
 
 // Route::get('/', 'HomeController@index')->name('home');
 
-// Route::get('reset-password/{key}', 'UsuarioController@resetPassword');
+
+// Login de usuario
+Route::get('escogerPerfil', 'HomeController@escogerPerfil');
+Route::post('/setPerfil', 'HomeController@setPerfil');
+
+
+// Utilidades
+Route::get('reset-password/{key}', 'UsuarioController@resetPassword');
+Route::get('update-user-profile/{key}', 'UsuarioController@updateUserProfile');
 
 
 // Route::get('login', [

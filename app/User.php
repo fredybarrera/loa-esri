@@ -58,17 +58,6 @@ class User extends Authenticatable
     }
 
 
-    public function ediciones()
-    {
-        return $this->hasMany('App\EdicionCapa', 'usuario_id_editor');
-    }
-
-
-    public function revisiones()
-    {
-        return $this->hasMany('App\EdicionCapa', 'usuario_id_revisor');
-    }
-
     
     public static function validaGuardar($request){
 
