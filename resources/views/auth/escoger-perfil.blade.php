@@ -5,19 +5,6 @@
     <link rel="stylesheet" href="{{ mix('/vendor/css/pages/authentication.css') }}">
 @endsection
 
-@section('styles')
-    <link rel="stylesheet" href="{{ mix('/vendor/libs/growl/growl.css') }}">
-    <link rel="stylesheet" href="{{ mix('/vendor/libs/toastr/toastr.css') }}">
-@endsection
-
-@section('scripts')
-    <!-- Dependencies -->
-    <script src="{{ mix('/vendor/libs/growl/growl.js') }}"></script>
-    <script src="{{ mix('/vendor/libs/toastr/toastr.js') }}"></script>
-    <script src="{{ mix('/js/ui_notifications.js') }}"></script>
-
-@endsection
-
 @section('content')
     <div class="authentication-wrapper authentication-2 ui-bg-cover ui-bg-overlay-container px-4" style="background-image: url('/images/bg/2.png');">
         <div class="ui-bg-overlay bg-dark opacity-25"></div>
@@ -46,7 +33,7 @@
                                         <div class="custom-controls-stacked">
                                             @foreach($perfiles as $perfil)
                                                 <label class="custom-control custom-radio">
-                                                    <input name="custom-radio-3" type="radio" name="perfil_id" value="{{ $perfil->id }}" class="custom-control-input">
+                                                    <input type="radio" name="perfil_id" value="{{ $perfil->id }}" class="custom-control-input">
                                                     <span class="custom-control-label">{{ $perfil->nombre }}</span>
                                                 </label>
                                             @endforeach
@@ -56,10 +43,14 @@
                             </fieldset>
                             <div class="form-group row">
                                 <div class="col-sm-10 ml-sm-auto">
-                                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    <button type="button" id="btn-login-perfil" class="btn btn-primary">Aceptar</button>
                                 </div>
                             </div>
                         </form>
+                        <div id="message-login" class="alert alert-dark-danger alert-dismissible fade show" style="display: none;">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            Debe escoger un perfil de usuario.
+                        </div>
                     </div>
                     <!-- / Form -->
                 </div>
@@ -70,15 +61,14 @@
 
 @section('scripts')
     <script>
-        $(function () {
-            $('#form-escoger-perfil').submit(function(evt) {
-                console.log('caaaa');
+            $("#btn-login-perfil").on("click", function(){
                 if($('input[name=perfil_id]:checked').length <=0)
                 {
-                    $.growl.warning({ title: "Error", message: "Debe escoger un perfil de usuario" });
-                    evt.preventDefault();
+                    $("#message-login").show();
+                }else{
+                    $( "#form-escoger-perfil" ).submit();
+                    $("#message-login").hide();
                 }
             });
-        });
     </script>
 @endsection

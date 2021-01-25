@@ -35,18 +35,21 @@
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
             <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
                 <img src="/images/avatars/{{ Auth::user()->foto }}" alt class="d-block ui-w-30 rounded-circle">
-                <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{{ Auth::user()->nombres }} {{ Auth::user()->apellidos }}</span>
+                <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{{ Auth::user()->nombres }} {{ Auth::user()->apellidos }} ({{ Session::get(App\Define::SESSION_PERFIL_ACTIVO)->nombre }})</span>
             </span>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-person text-lightest"></i> &nbsp; Mi perfil</a>
+            <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-person"></i> &nbsp; Mi perfil</a>
+            @if(sizeof(Auth::user()->perfiles) > 1)
+                <a href="{{ url('/cambiarPerfil') }}" class="dropdown-item">
+                    <i class="ion ion-md-repeat"></i> 
+                    <span class="text"> &nbsp; Cambiar perfil</span>
+                </a>
+            @endif
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="ion ion-ios-log-out text-danger"></i> &nbsp; {{ __('Logout') }}
+            <a class="dropdown-item" href="{{ url('/auth/logout') }}">
+                <i class="ion ion-ios-log-out text-danger"></i> &nbsp; {{ __('Logout') }}
             </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
         </div>
     </div>
 </nav>

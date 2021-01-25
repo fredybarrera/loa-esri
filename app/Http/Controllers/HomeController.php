@@ -35,6 +35,16 @@ class HomeController extends Controller
         return view('home', ['title' => 'Home']);
     }
 
+    /**
+     * Retorna el usuario logueado.
+     *
+     * @return Response
+     */
+    public static function getUsuario()
+    {
+        $usuario = Usuario::find(Auth::user()->id);
+        return ['usuario' => $usuario];
+    }
 
     /**
      * Muestra los perfiles disponibles de un usuario
@@ -59,7 +69,7 @@ class HomeController extends Controller
 
             }else{
                 
-                Session::set(Define::SESSION_PERFIL_ACTIVO, $perfiles[0]);
+                Session::put(Define::SESSION_PERFIL_ACTIVO, $perfiles[0]);
                 return redirect('home');
             }
 
@@ -69,7 +79,6 @@ class HomeController extends Controller
         }
     }
 
-
     /**
      * Establece el perfil del usuario
      *
@@ -77,12 +86,37 @@ class HomeController extends Controller
      */
     public function setPerfil(Request $request)
     {
-        dd('aca');
         $perfil_id  = $request->input('perfil_id');
         $objPerfil  = Perfil::find($perfil_id);
-        Session::set(Define::SESSION_PERFIL_ACTIVO, $objPerfil);
+        Session::put(Define::SESSION_PERFIL_ACTIVO, $objPerfil);
         Custom::log('HomeController', 'login', null);
+        return redirect('escogerPerfil');
+    }
+
+     /**
+     * Limpia el perfil del usuario
+     *
+     * @return Response
+     */
+    public function cambiarPerfil()
+    {
+        Custom::log('HomeController', 'cambiarPerfil', null);
+        Session::forget(Define::SESSION_PERFIL_ACTIVO);
 
         return redirect('escogerPerfil');
+    }
+
+    /**
+     * Logout del sistema
+     *
+     * @return Response
+     */
+    public function getLogout()
+    {
+        Custom::log('HomeController', 'logout', null);
+        Auth::logout();
+        Session::flush();
+
+        return redirect('/login');
     }
 }

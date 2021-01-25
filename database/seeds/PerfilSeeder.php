@@ -20,7 +20,7 @@ class PerfilSeeder extends Seeder
                 'updated_at'    => date("Y-m-d H:i:s")
             ]);
             DB::table('perfil')->insert([
-                'nombre'        => 'Usuario',
+                'nombre'        => 'Profesional',
                 'estado'        => 1,//Define::ESTADO_ACTIVO,
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")

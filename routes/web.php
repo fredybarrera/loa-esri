@@ -49,6 +49,11 @@ Auth::routes();
 // Login de usuario
 Route::get('escogerPerfil', 'HomeController@escogerPerfil');
 Route::post('/setPerfil', 'HomeController@setPerfil');
+Route::get('/auth/logout', [
+    'as' => 'logout',
+    'uses' => 'HomeController@getLogout'
+]);
+Route::get('cambiarPerfil', 'HomeController@cambiarPerfil');
 
 
 // Utilidades

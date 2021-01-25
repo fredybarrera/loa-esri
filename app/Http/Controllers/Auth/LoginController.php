@@ -31,6 +31,8 @@ class LoginController extends Controller
      */
     // protected $redirectTo = RouteServiceProvider::HOME;
     protected $redirectTo = '/home';
+    protected $redirectPath = '/escogerPerfil';
+    protected $loginPath = '/login';
 
     /**
      * Create a new controller instance.
@@ -40,6 +42,39 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Define el campo que será el login de usuario
+     *
+     * @return string
+     */
+    public function loginUsername()
+    {
+        return 'email';
+    }
+
+    /**
+     * Define la ruta para el redireccionamiento al loguearse
+     *
+     * @return string
+     */
+    public function redirectPath()
+    {
+        return '/escogerPerfil';
+    }
+
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect($this->redirectPath());
     }
 
 
