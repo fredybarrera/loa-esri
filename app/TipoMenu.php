@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Define;
+use App\Menu;
 use Validator;
 use DB;
-use App\Menu;
 
 class TipoMenu extends Model
 {

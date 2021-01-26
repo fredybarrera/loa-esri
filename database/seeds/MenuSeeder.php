@@ -14,9 +14,9 @@ class MenuSeeder extends Seeder
         DB::transaction(function () {
 
             DB::table('menu')->insert([
-                'nombre'        => 'Dashboard',
+                'nombre'        => 'Home',
                 'link'			=> 'dashboard-admin',
-                'clase_icono'	=> 'mdi mdi-view-dashboard',
+                'clase_icono'	=> 'ion ion-ios-home',
                 'orden'			=> 1,
                 'estado' 		=> 1,//\App\Define::ESTADO_ACTIVO,
                 'tipomenu_id'   => 3,//\App\Define::MENU_TIPO_TAREA,
@@ -26,7 +26,7 @@ class MenuSeeder extends Seeder
             DB::table('menu')->insert([
                 'nombre'        => 'Mantenedores',
                 'link'			=> 'mantenedores',
-                'clase_icono'	=> 'mdi mdi-settings',
+                'clase_icono'	=> 'ion ion-ios-build',
                 'orden'			=> 2,
                 'estado' 		=> 1,//\App\Define::ESTADO_ACTIVO,
                 'tipomenu_id'   => 1,//\App\Define::MENU_TIPO_MANTENEDOR,
@@ -34,9 +34,9 @@ class MenuSeeder extends Seeder
                 'updated_at'    => date("Y-m-d H:i:s")
             ]);
             DB::table('menu')->insert([
-                'nombre'        => 'Dashboard',
+                'nombre'        => 'Home',
                 'link'			=> 'dashboard-user',
-                'clase_icono'	=> 'mdi mdi-view-dashboard',
+                'clase_icono'	=> 'ion ion-ios-home',
                 'orden'			=> 3,
                 'estado' 		=> 1,//\App\Define::ESTADO_ACTIVO,
                 'tipomenu_id'   => 3,//\App\Define::MENU_TIPO_TAREA,
@@ -46,7 +46,7 @@ class MenuSeeder extends Seeder
             DB::table('menu')->insert([
                 'nombre'        => 'Tareas',
                 'link'			=> 'tarea',
-                'clase_icono'	=> 'mdi mdi-border-color',
+                'clase_icono'	=> 'ion ion-md-calendar',
                 'orden'			=> 4,
                 'estado' 		=> 1,//\App\Define::ESTADO_ACTIVO,
                 'tipomenu_id'   => 2,//\App\Define::MENU_TIPO_TAREA,

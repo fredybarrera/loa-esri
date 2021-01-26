@@ -40,7 +40,8 @@ Route::get('/page-2', 'Page2Controller')->name('page-2');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::resource('usuarios', UsuarioController::class);
+Route::resource('usuario', UsuarioController::class);
+Route::resource('tarea', TareaController::class);
 Auth::routes();
 
 // Route::get('/', 'HomeController@index')->name('home');
