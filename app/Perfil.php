@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Define;
+use App\Define;
 use Validator;
 use DB;
 

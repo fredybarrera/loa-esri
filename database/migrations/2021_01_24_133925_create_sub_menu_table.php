@@ -19,9 +19,7 @@ class CreateSubMenuTable extends Migration
             $table->string('link');
             $table->integer('orden');
             $table->integer('estado');
-            $table->integer('menu_id');
             $table->integer('tipo_submenu_id');
-            $table->foreign('menu_id')->references('id')->on('menu');
             $table->foreign('tipo_submenu_id')->references('id')->on('tipo_submenu');
             $table->timestamps();
         });

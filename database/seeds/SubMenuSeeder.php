@@ -18,7 +18,6 @@ class SubMenuSeeder extends Seeder
                 'link'			=> 'usuario',
                 'orden'			=> 1,
                 'estado' 		=> 1, //Define::ESTADO_ACTIVO,
-                'menu_id'       => 2, // Mantenedor
                 'tipo_submenu_id'   => 1, // Mantenedor
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -28,7 +27,6 @@ class SubMenuSeeder extends Seeder
                 'link'			=> 'perfil',
                 'orden'			=> 2,
                 'estado' 		=> 1, //Define::ESTADO_ACTIVO
-                'menu_id'       => 2, // Mantenedor,
                 'tipo_submenu_id'   => 1, // Mantenedor
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -38,7 +36,6 @@ class SubMenuSeeder extends Seeder
                 'link'			=> 'iniciativa',
                 'orden'			=> 3,
                 'estado' 		=> 1, //Define::ESTADO_ACTIVO
-                'menu_id'       => 2, // Mantenedor,
                 'tipo_submenu_id'   => 1, // Mantenedor
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -48,7 +45,6 @@ class SubMenuSeeder extends Seeder
                 'link'			=> 'actividad',
                 'orden'			=> 4,
                 'estado' 		=> 1, //Define::ESTADO_ACTIVO
-                'menu_id'       => 2, // Mantenedor,
                 'tipo_submenu_id'   => 1, // Mantenedor
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -58,7 +54,6 @@ class SubMenuSeeder extends Seeder
                 'link'			=> 'ticket',
                 'orden'			=> 5,
                 'estado' 		=> 1, //Define::ESTADO_ACTIVO
-                'menu_id'       => 2, // Mantenedor,
                 'tipo_submenu_id'   => 1, // Mantenedor
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -68,7 +63,6 @@ class SubMenuSeeder extends Seeder
                 'link'			=> 'area',
                 'orden'			=> 6,
                 'estado' 		=> 1, //Define::ESTADO_ACTIVO
-                'menu_id'       => 2, // Mantenedor,
                 'tipo_submenu_id'   => 1, // Mantenedor
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -81,7 +75,6 @@ class SubMenuSeeder extends Seeder
                 'link'          => 'menu',
                 'orden'         => 10,
                 'estado'        => 1,//Define::ESTADO_ACTIVO,
-                'menu_id'       => 2, // Mantenedor
                 'tipo_submenu_id'   => 1,//\App\Define::SUBMENU_TIPO_MANTENEDOR,
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -92,7 +85,6 @@ class SubMenuSeeder extends Seeder
                 'link'          => 'submenu',
                 'orden'         => 11,
                 'estado'        => 1,//Define::ESTADO_ACTIVO,
-                'menu_id'       => 2, // Mantenedor
                 'tipo_submenu_id'   => 1,//\App\Define::SUBMENU_TIPO_MANTENEDOR,
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -103,7 +95,6 @@ class SubMenuSeeder extends Seeder
                 'link'          => 'tipomenu',
                 'orden'         => 12,
                 'estado'        => 1,//Define::ESTADO_ACTIVO,
-                'menu_id'       => 2, // Mantenedor
                 'tipo_submenu_id'   => 1,//\App\Define::SUBMENU_TIPO_MANTENEDOR,
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")
@@ -113,7 +104,6 @@ class SubMenuSeeder extends Seeder
                 'link'          => 'tiposubmenu',
                 'orden'         => 13,
                 'estado'        => 1,//Define::ESTADO_ACTIVO,
-                'menu_id'       => 2, // Mantenedor
                 'tipo_submenu_id'   => 1,//\App\Define::SUBMENU_TIPO_MANTENEDOR,
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s")

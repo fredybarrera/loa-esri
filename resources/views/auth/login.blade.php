@@ -41,7 +41,7 @@
                     <h4 class="text-center text-lighter font-weight-normal mt-2 mb-2">Login LOA</h4>
                     <!-- Form -->
                     <form method="POST" action="{{ route('login') }}">
-                        @csrf
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class="form-group">
                             <label for="email" class="col-form-label text-md-right">{{ __('E-Mail') }}</label>
                             <div class="">

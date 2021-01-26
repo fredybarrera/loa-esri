@@ -94,7 +94,7 @@ class User extends Authenticatable
         ]);
 
         foreach ($req['perfil_id'] as $key => $perfil_id) {
-            DB::table('public.usuario_perfil')->insert([
+            DB::table('usuario_perfil')->insert([
                 'usuario_id'    => $usuario->id,
                 'perfil_id'     => $perfil_id
             ]);
@@ -151,10 +151,10 @@ class User extends Authenticatable
         ]);
 
         //borro los anteriores
-        DB::table('public.usuario_perfil')->where('usuario_id', $usuario->id)->delete();
+        DB::table('usuario_perfil')->where('usuario_id', $usuario->id)->delete();
 
         foreach ($req['perfil_id'] as $key => $perfil_id) {
-            DB::table('public.usuario_perfil')->insert([
+            DB::table('usuario_perfil')->insert([
                 'usuario_id'    => $usuario->id,
                 'perfil_id'     => $perfil_id
             ]);

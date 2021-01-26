@@ -91,4 +91,17 @@ class Custom
 
 		// LogSistema::crear($data);
 	}
+
+
+	/**
+     * Retorna el menú del usuario.
+     *
+     * @return Response
+     */
+    public static function getMenu()
+    {
+        $perfil_activo = Session::get(Define::SESSION_PERFIL_ACTIVO);
+		$perfil_activo->load(['menus']);
+        return ['menus' => $perfil_activo->menus];
+    }
 }
