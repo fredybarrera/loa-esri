@@ -47,6 +47,14 @@ Auth::routes();
 // Route::get('/', 'HomeController@index')->name('home');
 
 
+Route::post('registrar-tarea',[
+    'uses' => 'TareaController@registrarTarea'
+]);
+Route::post('actualizar-tarea',[
+    'uses' => 'TareaController@actualizarTarea'
+]);
+
+
 // Login de usuario
 Route::get('escogerPerfil', 'HomeController@escogerPerfil');
 Route::post('/setPerfil', 'HomeController@setPerfil');

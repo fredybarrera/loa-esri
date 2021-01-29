@@ -18,6 +18,7 @@ class Custom
      */
 	public static function error($clase, $metodo, $e, $detalle=null)
 	{
+		dd($e);
 		// $usuario_id 	= Auth::user()->id;
 		// $perfil_activo  = Session::get(Define::SESSION_PERFIL_ACTIVO);
 		// $perfil_id  	= $perfil_activo->id;

@@ -24,7 +24,7 @@ class Tarea extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'cod_ticket', 'cod_usuario', 'horas', 'observaciones', 'fecha'
+        'codigo', 'cod_ticket', 'cod_usuario', 'horas', 'observaciones', 'fecha', 'fecha_inicio', 'fecha_fin'
     ];
 
     public function ticket()
@@ -45,6 +45,8 @@ class Tarea extends Model
             'horas'             => 'required|numeric',
             'observaciones'     => 'required',
             'fecha'             => 'required',
+            'fecha_inicio'      => 'required',
+            'fecha_fin'         => 'required',
         ];
 
         return Validator::make($request->all(), $rules);
@@ -59,20 +61,24 @@ class Tarea extends Model
         $obj->horas           = $req['horas'];
         $obj->observaciones   = $req['observaciones'];
         $obj->fecha           = $req['fecha'];
+        $obj->fecha_inicio    = $req['fecha_inicio'];
+        $obj->fecha_fin       = $req['fecha_fin'];
         $obj->save();
 
         return $obj->codigo;
     }
 
 
-    public static function editar($req, $id){
+    public static function editar($req, $codigo){
 
-        $obj                    = Self::findOrFail($id);
+        $obj                    = Self::findOrFail($codigo);
         $obj->cod_ticket        = $req['cod_ticket'];
         $obj->cod_usuario       = $req['cod_usuario'];
         $obj->horas             = $req['horas'];
         $obj->observaciones     = $req['observaciones'];
         $obj->fecha             = $req['fecha'];
+        $obj->fecha_inicio      = $req['fecha_inicio'];
+        $obj->fecha_fin         = $req['fecha_fin'];
         $obj->save();
     }
 
@@ -80,9 +86,9 @@ class Tarea extends Model
     /**
      * @var array
      */
-    public static function eliminar($id){
+    public static function eliminar($codigo){
         
-        $obj = Self::findOrFail($id);
+        $obj = Self::findOrFail($codigo);
         $obj->delete();
 
         return true;      

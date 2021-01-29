@@ -6,6 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ isset($title) ? $title.' - ' : '' }}Esri Chile</title>
 
@@ -63,6 +64,14 @@
 
     <!-- Application javascripts -->
     <script src="{{ mix('/js/application.js') }}"></script>
+
+    <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    </script>
 
 </body>
 </html>

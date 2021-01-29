@@ -4920,28 +4920,28 @@ function refinePluginDefs(pluginInputs) {
 }
 
 var RAW_EN_LOCALE = {
-    code: 'en',
+    code: 'es',
     week: {
         dow: 0,
         doy: 4 // 4 days need to be within the year to be considered the first week
     },
     dir: 'ltr',
     buttonText: {
-        prev: 'prev',
-        next: 'next',
-        prevYear: 'prev year',
-        nextYear: 'next year',
-        year: 'year',
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day',
-        list: 'list'
+        prev: 'anterior',
+        next: 'siguiente',
+        prevYear: 'año anterior',
+        nextYear: 'año siguiente',
+        year: 'año',
+        today: 'hoy',
+        month: 'mes',
+        week: 'semana',
+        day: 'día',
+        list: 'lista'
     },
     weekLabel: 'W',
-    allDayText: 'all-day',
-    eventLimitText: 'more',
-    noEventsMessage: 'No events to display'
+    allDayText: 'Todo el dia',
+    eventLimitText: 'mas',
+    noEventsMessage: 'No hay eventos para mostrar'
 };
 function parseRawLocales(explicitRawLocales) {
     var defaultCode = explicitRawLocales.length > 0 ? explicitRawLocales[0].code : 'en';
@@ -16624,7 +16624,7 @@ var calendarPlugins = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Proyectos\Esri - LOA\template\laravel-starter\resources\assets\vendor\libs\fullcalendar\fullcalendar.js */"./resources/assets/vendor/libs/fullcalendar/fullcalendar.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\loa-esri\resources\assets\vendor\libs\fullcalendar\fullcalendar.js */"./resources/assets/vendor/libs/fullcalendar/fullcalendar.js");
 
 
 /***/ })

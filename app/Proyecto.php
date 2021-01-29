@@ -5,14 +5,14 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Validator;
 
-class Ticket extends Model
+class Proyecto extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'ticket';
+    protected $table = 'proyecto';
 
     protected $primaryKey = 'codigo';
     
@@ -24,12 +24,12 @@ class Ticket extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'cod_proyecto', 'descripcion', 'notas', 'activo', 'creacion', 'plazo', 'cod_usuario_sol', 'cod_usuario_res'
+        'codigo', 'nombre', 'descripcion', 'cod_usuario_res'
     ];
 
-    public function proyecto()
+    public function tickets()
     {
-        return $this->belongsTo('App\Proyecto', 'cod_proyecto');
+        return $this->hasMany('App\Ticket', 'cod_proyecto');
     }
 
     // public function usuario()

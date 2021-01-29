@@ -42,7 +42,7 @@ class HomeController extends Controller
      */
     public static function getUsuario()
     {
-        $usuario = Usuario::find(Auth::user()->id);
+        $usuario = User::find(Auth::user()->id);
         return ['usuario' => $usuario];
     }
 

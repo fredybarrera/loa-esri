@@ -22,7 +22,7 @@
                         </ul>
                     </li>
                 @else
-                    <li class="sidenav-item{{ (Request::is('*'.$menu->link) ? 'class=active' : '') }}">
+                    <li class="sidenav-item {{ (Request::is('*'.$menu->link) ? 'active' : '') }}">
                         <a href="{{ url('/'.$menu->link) }}" class="sidenav-link"><i class="sidenav-icon {{ $menu->clase_icono }}"></i>
                         <div>{{ $menu->nombre }}</div>
                         </a>
@@ -45,7 +45,7 @@
                         </ul>
                     </li>
                 @else
-                    <li class="sidenav-item{{ (Request::is('*'.$menu->link) ? 'class=active' : '') }}">
+                    <li class="sidenav-item {{ (Request::is('*'.$menu->link) ? 'active' : '') }}">
                         <a href="{{ url('/'.$menu->link) }}" class="sidenav-link"><i class="sidenav-icon {{ $menu->clase_icono }}"></i>
                         <div>{{ $menu->nombre }}</div>
                         </a>
@@ -68,7 +68,7 @@
                         </ul>
                     </li>
                 @else
-                    <li class="sidenav-item{{ (Request::is('*'.$menu->link) ? 'class=active' : '') }}">
+                    <li class="sidenav-item {{ (Request::is('*'.$menu->link) ? 'active' : '') }}">
                         <a href="{{ url('/'.$menu->link) }}" class="sidenav-link"><i class="sidenav-icon {{ $menu->clase_icono }}"></i>
                         <div>{{ $menu->nombre }}</div>
                         </a>

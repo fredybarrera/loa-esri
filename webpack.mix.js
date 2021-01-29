@@ -114,7 +114,7 @@ mixAssetsDir('vendor/fonts/*/*', (src, dest) => mix.copy(src, dest));
  |--------------------------------------------------------------------------
  */
 
-mix.js('resources/assets/js/application.js', 'public/js')
+mix.js(['resources/assets/js/application.js'], 'public/js')
    .sass('resources/assets/sass/application.scss', 'public/css');
 
 mix.version();
