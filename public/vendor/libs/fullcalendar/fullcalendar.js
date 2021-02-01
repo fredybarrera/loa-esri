@@ -4920,28 +4920,28 @@ function refinePluginDefs(pluginInputs) {
 }
 
 var RAW_EN_LOCALE = {
-    code: 'es',
+    code: 'en',
     week: {
         dow: 0,
         doy: 4 // 4 days need to be within the year to be considered the first week
     },
     dir: 'ltr',
     buttonText: {
-        prev: 'anterior',
-        next: 'siguiente',
-        prevYear: 'año anterior',
-        nextYear: 'año siguiente',
-        year: 'año',
-        today: 'hoy',
-        month: 'mes',
-        week: 'semana',
-        day: 'día',
-        list: 'lista'
+        prev: 'prev',
+        next: 'next',
+        prevYear: 'prev year',
+        nextYear: 'next year',
+        year: 'year',
+        today: 'today',
+        month: 'month',
+        week: 'week',
+        day: 'day',
+        list: 'list'
     },
     weekLabel: 'W',
-    allDayText: 'Todo el dia',
-    eventLimitText: 'mas',
-    noEventsMessage: 'No hay eventos para mostrar'
+    allDayText: 'all-day',
+    eventLimitText: 'more',
+    noEventsMessage: 'No events to display'
 };
 function parseRawLocales(explicitRawLocales) {
     var defaultCode = explicitRawLocales.length > 0 ? explicitRawLocales[0].code : 'en';

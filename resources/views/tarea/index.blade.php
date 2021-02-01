@@ -8,6 +8,8 @@
     <!-- Dependencies -->
     <script src="{{ mix('/vendor/libs/moment/moment.js') }}"></script>
     <script src="{{ mix('/vendor/libs/fullcalendar/fullcalendar.js') }}"></script>
+    <script src="{{ mix('/vendor/libs/bootbox/bootbox.js') }}"></script>
+
 
     <!-- Javascript -->
     <script>
@@ -64,9 +66,9 @@
                 nowIndicator: true, // Show "now" indicator
                 firstDay: 1, // Set "Monday" as start of a week
                 businessHours: {
-                    dow: [1, 2, 3, 4, 5], // Monday - Friday
-                    start: '08:00',
-                    end: '20:00',
+                    startTime: '09:00',
+                    endTime: '18:00',
+                    daysOfWeek: [1, 2, 3, 4, 5],
                 },
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
@@ -77,13 +79,54 @@
                     }
                 },
                 eventRender: function (info) {
-                    info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
-                    ${moment(info.event.start).format('HH:mm')} - 
-                    ${moment(info.event.end).format('HH:mm')}<br />
-                    ${info.event.extendedProps.iniciativa}</span>`;
+                    console.log('eventRender ifo: ', info);
+                    if(info.view.type === "dayGridMonth"){
+                        info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
+                        ${moment(info.event.start).format('HH:mm')} - 
+                        ${moment(info.event.end).format('HH:mm')}<br />
+                        <b>${info.event.extendedProps.iniciativa}</b></span>`;
+                    }else{
+                        html_button= '<button type="button" class="btn btn-sm btn-outline-danger rounded-pill removebtn" style="position: absolute;bottom: 15px;right: 15px;" title="Eliminar tarea"><span class="ion ion-md-trash d-block"></span></button>';
+                        $(info.el).append(html_button);
+                        info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
+                        ${moment(info.event.start).format('HH:mm')} - 
+                        ${moment(info.event.end).format('HH:mm')}<br />
+                        <b>${info.event.extendedProps.iniciativa}</b><br />
+                        ${info.event.extendedProps.observaciones}</span>`;
+                    }
 
-                    console.log('eventRender ifo.event: ', info.event);
-                    console.log('info.el.firstChild.innerHTML: ', info.el.firstChild.innerHTML);
+                    $(info.el).find(".removebtn").click(function(e) {
+                        e.preventDefault();
+                        var eventData = {id: info.event.id}
+                        info.event.remove();
+                        console.log('eliminar: ', info.event.id);
+                        bootbox.confirm({
+                            message:   '¿Confirma que desea eliminar la tarea en <b>'+ info.event.extendedProps.iniciativa +'</b>?',
+                            className: 'bootbox-sm',
+                            callback: function(result) {
+                                if(result)
+                                {
+                                    $.ajax({
+                                        url: 'eliminar-tarea',
+                                        data: eventData,
+                                        type: 'POST',
+                                        success: function(response) {
+                                            if(response.status == 'success')
+                                            {
+                                                $('#fullcalendar-default-view-modal').modal('hide');
+                                            }
+                                        },
+                                        error: function(e) {
+                                            $("#message-error-tarea").html(e.responseJSON.message).show();
+                                        }
+                                    });
+                                    
+                                }else{
+                                    defaultCalendar.addEvent(info.event);
+                                }
+                            },
+                        });
+                    });
                 },
                 select: function (selectionData) {
                     console.log('select selectionData: ', selectionData);
@@ -163,7 +206,7 @@
                                     }
                                 },
                                 error: function(e) {
-                                    $("#message-error-tarea").html(e.message).show();
+                                    $("#message-error-tarea").html(e.responseJSON.message).show();
                                 }
                             });
                         }else{
@@ -179,6 +222,8 @@
                         $('#txt-observaciones').val(info.event.extendedProps.observaciones);
                         $("#sel-ticket").val(info.event.extendedProps.cod_ticket).change();
                         $("#sel-ticket").trigger('focus');
+                        // $(".modal-tarea").append('<button type="button" class="btn btn-danger md-btn-flat">Eliminar</button>')
+
                     })
                     .on('hidden.bs.modal', function() {
                         $(this).off('shown.bs.modal hidden.bs.modal submit');
@@ -188,11 +233,8 @@
                         defaultCalendar.unselect();
                     })
                     .on('submit', function(e) {
-                        console.log('acaaaaa submit eventClick');
                         e.preventDefault();
-
                         console.log('submit info.event: ', info.event);
-
                         var observaciones = $("#txt-observaciones").val();
                         var cod_ticket = $('#sel-ticket :selected').val();
                         var iniciativa = $('#sel-ticket :selected').text();
@@ -225,7 +267,8 @@
                                     }
                                 },
                                 error: function(e) {
-                                    $("#message-error-tarea").html(e.message).show();
+                                    console.log('exception: ', e);
+                                    $("#message-error-tarea").html(e.responseJSON.message).show();
                                 }
                             });
                         }else{
@@ -236,29 +279,75 @@
                 },
                 eventDrop: function(info) {
                     console.log('eventDrop info.event: ', info.event);
-
-                    alert(info.event.extendedProps.observaciones + " was dropped on " + info.event.start.toISOString());
-
-                    if (!confirm("Are you sure about this change?")) {
-                        info.revert();
-                    }else{
-                        //Ajax para guardar los nuevos valores
-                        console.log('ajaxxxxxxx')
-                    }
+                    bootbox.confirm({
+                        message:   '¿Confirma que desea mover la tarea en <b>' + info.event.extendedProps.iniciativa + '</b>?',
+                        className: 'bootbox-sm',
+                        callback: function(result) {
+                            if (!result) {
+                                info.revert();
+                            }else{
+                                var eventData = {
+                                    observaciones: info.event.extendedProps.observaciones,
+                                    iniciativa: info.event.extendedProps.iniciativa,
+                                    start: info.event.start,
+                                    end: info.event.end,
+                                    className: null,
+                                    cod_ticket: info.event.extendedProps.cod_ticket,
+                                    id: info.event.id
+                                }
+                                $.ajax({
+                                    url: 'actualizar-tarea',
+                                    data: eventData,
+                                    type: 'POST',
+                                    success: function(response) {
+                                        if(response.status == 'success')
+                                        {
+                                            $('#fullcalendar-default-view-modal').modal('hide');
+                                        }
+                                    },
+                                    error: function(e) {
+                                        $("#message-error-tarea").html(e.responseJSON.message).show();
+                                    }
+                                });
+                            }
+                        },
+                    });
                 },
                 eventResize: function(info) {
                     console.log('eventResize info.event: ', info.event);
-
-                    alert(info.event.extendedProps.observaciones + " end is now " + info.event.end.toISOString());
-
-                    if (!confirm("is this okay?")) {
-                        info.revert();
-                    }else{
-                        console.log('ajaxxxxxxx')
-                        console.log('start: ', info.event.start);
-                        console.log('end: ', info.event.end);
-
-                    }
+                    bootbox.confirm({
+                        message:   '¿Confirma que desea guardar los cambios en <b>'+ info.event.extendedProps.iniciativa +'</b>?',
+                        className: 'bootbox-sm',
+                        callback: function(result) {
+                            if (!result) {
+                                info.revert();
+                            }else{
+                                var eventData = {
+                                    observaciones: info.event.extendedProps.observaciones,
+                                    iniciativa: info.event.extendedProps.iniciativa,
+                                    start: info.event.start,
+                                    end: info.event.end,
+                                    className: null,
+                                    cod_ticket: info.event.extendedProps.cod_ticket,
+                                    id: info.event.id
+                                }
+                                $.ajax({
+                                    url: 'actualizar-tarea',
+                                    data: eventData,
+                                    type: 'POST',
+                                    success: function(response) {
+                                        if(response.status == 'success')
+                                        {
+                                            $('#fullcalendar-default-view-modal').modal('hide');
+                                        }
+                                    },
+                                    error: function(e) {
+                                        $("#message-error-tarea").html(e.responseJSON.message).show();
+                                    }
+                                });
+                            }
+                        },
+                    });
                 }
             });
             
@@ -302,7 +391,7 @@
                     </div>
                     <div id="message-error-tarea" class="alert alert-dark-danger fade show" style="display: none;"></div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer modal-tarea">
                     <button type="button" class="btn btn-default md-btn-flat" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary md-btn-flat">Guardar</button>
                 </div>

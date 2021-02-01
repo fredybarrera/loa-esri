@@ -53,6 +53,9 @@ Route::post('registrar-tarea',[
 Route::post('actualizar-tarea',[
     'uses' => 'TareaController@actualizarTarea'
 ]);
+Route::post('eliminar-tarea',[
+    'uses' => 'TareaController@eliminarTarea'
+]);
 
 
 // Login de usuario

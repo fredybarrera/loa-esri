@@ -117,7 +117,7 @@ class TareaController extends Controller
     }
 
     /**
-     * Registra las horas de una iniciativa
+     * Actualiza una tarea
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -137,7 +137,13 @@ class TareaController extends Controller
 
             $diff = $date2->diff($date1);
             $hours = $diff->h;
-            $hours = $hours + ($diff->days*24);
+            if($hours > 0)
+            {
+
+            }else{
+                $minutes = $diff->i;
+                $hours = $minutes / 60;
+            }
 
             $req = [
                 'cod_ticket' => $request->input('cod_ticket'),
@@ -162,6 +168,30 @@ class TareaController extends Controller
         }
     }
 
+    /**
+     * Elimina una tarea
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function eliminarTarea(Request $request)
+    {
+        try{
+
+            $input = $request->all();
+            $codigo = $request->input('id');
+            $usuario = User::find(Auth::user()->id);
+
+            Tarea::eliminar($codigo);
+
+            return response()->json([
+                'status' => 'success'
+            ]);
+
+        }catch (\Exception $e){
+            Custom::error('TareaController', 'registrarTarea', $e);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
