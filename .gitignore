@@ -10,7 +10,6 @@
 /vendor
 .env
 /nbproject
-/node_modules
 Homestead.json
 Homestead.yaml
 package-lock.json
