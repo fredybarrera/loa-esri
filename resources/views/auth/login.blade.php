@@ -78,13 +78,13 @@
                         <input type="submit" class="btn btn-primary" value="Login"/>
                     </form>
                     <div class="form-group mb-0">
-                        <div class="">
+                        {{-- <div class="">
                             @if (Route::has('password.request'))
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('¿Olvidaste tu contraseña?') }}
                                 </a>
                             @endif
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
