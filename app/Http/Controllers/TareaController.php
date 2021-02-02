@@ -44,7 +44,7 @@ class TareaController extends Controller
             foreach($tareas as $tarea)
             {
                 $data['iniciativa'] = $tarea->ticket->descripcion;
-                $data['observaciones'] = $tarea->observaciones;
+                $data['observaciones'] = ($tarea->observaciones)?$tarea->observaciones:'';
                 $data['cod_ticket'] = $tarea->ticket->codigo;
                 $data['horas'] = $tarea->horas;
                 $data['id'] = $tarea->codigo;
@@ -89,7 +89,15 @@ class TareaController extends Controller
             $diff = $date2->diff($date1);
             $hh = $diff->h;
             $mm = $diff->i;
-            $horas = $hh + ($mm / 60);
+            $suma = $hh + ($mm / 60);
+            $type = gettype($suma);
+
+            if($type == 'integer')
+            {
+                $horas = $suma;
+            }else{
+                $horas = round($suma, 2);
+            }
 
             $req = [
                 'cod_ticket' => $request->input('cod_ticket'),
@@ -136,8 +144,15 @@ class TareaController extends Controller
             $diff = $date2->diff($date1);
             $hh = $diff->h;
             $mm = $diff->i;
-            $horas = $hh + ($mm / 60);
+            $suma = $hh + ($mm / 60);
+            $type = gettype($suma);
 
+            if($type == 'integer')
+            {
+                $horas = $suma;
+            }else{
+                $horas = round($suma, 2);
+            }
 
             $req = [
                 'cod_ticket' => $request->input('cod_ticket'),

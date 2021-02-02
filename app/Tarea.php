@@ -76,7 +76,7 @@ class Tarea extends Model
         $obj->cod_usuario       = $req['cod_usuario'];
         $obj->horas             = $req['horas'];
         $obj->observaciones     = $req['observaciones'];
-        $obj->fecha             = $req['fecha'];
+        // $obj->fecha             = $req['fecha'];
         $obj->fecha_inicio      = $req['fecha_inicio'];
         $obj->fecha_fin         = $req['fecha_fin'];
         $obj->save();

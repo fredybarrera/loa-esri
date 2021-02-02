@@ -91,7 +91,7 @@ Route::get('cambiarPerfil', 'HomeController@cambiarPerfil');
 |--------------------------------------------------------------------------
 |
 */
-Route::get('reset-password/{key}', 'UsuarioController@resetPassword');
-Route::get('update-user-profile/{key}', 'UsuarioController@updateUserProfile');
-
+Route::get('reset-password/{key}', 'HomeController@resetPassword');
+Route::get('update-user-profile/{key}', 'HomeController@updateUserProfile');
+Route::get('update-dates/{key}', 'HomeController@updateDates');
 

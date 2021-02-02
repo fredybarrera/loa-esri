@@ -81,15 +81,15 @@
                         info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
                         ${moment(info.event.start).format('HH:mm')} - 
                         ${moment(info.event.end).format('HH:mm')} 
-                        <span style="font-weight: bold;float: right;">${info.event.extendedProps.horas}hh</span><br />
+                        <span style="font-weight: bold;">(${info.event.extendedProps.horas}hh)</span><br />
                         <b>${info.event.extendedProps.iniciativa}</b></span>`;
                     }else{
-                        html_button= '<button type="button" class="btn btn-sm btn-outline-danger rounded-pill removebtn" style="position: absolute;bottom: 15px;right: 15px;" title="Eliminar tarea"><span class="ion ion-md-trash d-block"></span></button>';
+                        html_button= '<button type="button" class="btn btn-sm btn-outline-danger rounded-pill removebtn" style="position: absolute;bottom: 1px;right: 2px; z-index: 999;" title="Eliminar tarea"><span class="ion ion-md-trash d-block"></span></button>';
                         $(info.el).append(html_button);
                         info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
                         ${moment(info.event.start).format('HH:mm')} - 
                         ${moment(info.event.end).format('HH:mm')}
-                        <span style="font-weight: bold;float: right;">${info.event.extendedProps.horas}hh</span><br />
+                        <span style="font-weight: bold;">(${info.event.extendedProps.horas}hh)</span><br />
                         <b>${info.event.extendedProps.iniciativa}</b><br />
                         ${info.event.extendedProps.observaciones}</span>`;
                     }
