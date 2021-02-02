@@ -30,23 +30,37 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Usuarios autenticados
+| Rutas
 |--------------------------------------------------------------------------
 |
 */
 
-Route::get('/page-2', 'Page2Controller')->name('page-2');
-// Route::get('/', 'HomeController')->name('home');
-Route::get('/home', 'HomeController@index')->name('home');
-
-
-Route::resource('usuario', UsuarioController::class);
+// Resources
 Route::resource('tarea', TareaController::class);
+Route::resource('usuario', UsuarioController::class);
+
 Auth::routes();
 
-// Route::get('/', 'HomeController@index')->name('home');
+/*
+|--------------------------------------------------------------------------
+| Home de usuarios
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/page-2', 'Page2Controller')->name('page-2');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard-user', 'HomeController@dashboardUser')->name('dashboard-user');
+Route::get('/dashboard-admin', 'HomeController@dashboardAdmin')->name('dashboard-admin');
 
-
+Route::post('activar-usuario',[
+    'uses' => 'UsuarioController@activarUsuario'
+]);
+/*
+|--------------------------------------------------------------------------
+| Modulo tareas
+|--------------------------------------------------------------------------
+|
+*/
 Route::post('registrar-tarea',[
     'uses' => 'TareaController@registrarTarea'
 ]);
@@ -57,8 +71,12 @@ Route::post('eliminar-tarea',[
     'uses' => 'TareaController@eliminarTarea'
 ]);
 
-
-// Login de usuario
+/*
+|--------------------------------------------------------------------------
+| Login de usuario
+|--------------------------------------------------------------------------
+|
+*/
 Route::get('escogerPerfil', 'HomeController@escogerPerfil');
 Route::post('/setPerfil', 'HomeController@setPerfil');
 Route::get('/auth/logout', [
@@ -67,18 +85,13 @@ Route::get('/auth/logout', [
 ]);
 Route::get('cambiarPerfil', 'HomeController@cambiarPerfil');
 
-
-// Utilidades
+/*
+|--------------------------------------------------------------------------
+| Utilidades
+|--------------------------------------------------------------------------
+|
+*/
 Route::get('reset-password/{key}', 'UsuarioController@resetPassword');
 Route::get('update-user-profile/{key}', 'UsuarioController@updateUserProfile');
 
 
-// Route::get('login', [
-//     'as' => 'login', 
-//     'uses' => 'Auth\LoginController@login'
-// ]);
-
-// Route::post('auth/login', [
-//     'as' =>'login', 
-//     'uses' => 'Auth\LoginController@postLogin'
-// ]);

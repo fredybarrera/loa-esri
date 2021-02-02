@@ -36,6 +36,28 @@ class HomeController extends Controller
     }
 
     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function dashboardUser()
+    {
+        // return view('home', ['title' => 'Home']);
+        dd('acaaaa user');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function dashboardAdmin()
+    {
+        // return view('home', ['title' => 'Home']);
+        dd('acaaaa admin');
+    }
+
+    /**
      * Retorna el usuario logueado.
      *
      * @return Response

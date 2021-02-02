@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Custom;
+use App\Perfil;
+use App\User;
+use Auth;
 
 class UsuarioController extends Controller
 {
@@ -15,7 +19,9 @@ class UsuarioController extends Controller
      */
     public function __construct()
     {
+        // Solo los usuarios autenticados y administradores pueden acceder a este recurso.
         $this->middleware('auth');
+        $this->middleware('administradores');
     }
 
     /**
@@ -25,7 +31,12 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        die('acaaaaaaaaaaaa');
+        $items = User::orderBy('apellidos')->get();
+
+        return view('usuario.index', [
+            'title' => 'Usuarios',
+            'items' => $items
+        ]);
     }
 
     /**
@@ -68,7 +79,14 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        //
+        $item = User::findOrFail($id);
+        $perfiles = Perfil::orderBy('nombre')->get();
+
+        return view('usuario.editar', [
+            'title' => 'Usuarios',
+            'item' => $item,
+            'perfiles' => $perfiles
+        ]);
     }
 
     /**
@@ -91,7 +109,42 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+
+            User::desactivar($id);
+
+            return response()->json([
+                'status' => 'success'
+            ]);
+
+        }catch (\Exception $e){
+            Custom::error('UsuarioController', 'destroy', $e);
+        }
+    }
+
+
+    /**
+     * Activa un usuario
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function activarUsuario(Request $request)
+    {
+        try{
+
+            $input = $request->all();
+            $id = $request->input('id');
+
+            User::activar($id);
+
+            return response()->json([
+                'status' => 'success'
+            ]);
+
+        }catch (\Exception $e){
+            Custom::error('TareaController', 'registrarTarea', $e);
+        }
     }
 
 

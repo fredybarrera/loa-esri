@@ -6,6 +6,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Define;
+use Session;
+use Auth;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -162,6 +166,32 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * Inactiva el usuario.
+     * El usuario mantiene todas sus configuraciones, pero no puede ingresar al sistema.
+     *
+     * @var array
+     */
+    public static function desactivar($id){
+        
+        $obj = Self::findOrFail($id);
+        $obj->estado = Define::ESTADO_INACTIVO;
+        $obj->save();
+    }
+
+
+    /**
+     * Activa el usuario.
+     *
+     * @var array
+     */
+    public static function activar($id){
+        
+        $obj = Self::findOrFail($id);
+        $obj->estado = Define::ESTADO_ACTIVO;
+        $obj->save();
+    }
+
     public static function editarMisDatos($req, $request){
         
         $usuario                = Self::findOrFail($req['id']);
@@ -186,4 +216,11 @@ class User extends Authenticatable
 
         $usuario->save();
     }
+
+    public function getPerfilActivo()
+    {
+        $perfil_activo = Session::get(Define::SESSION_PERFIL_ACTIVO);
+        return $perfil_activo;
+    }
+
 }

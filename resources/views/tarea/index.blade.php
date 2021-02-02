@@ -14,15 +14,12 @@
     <!-- Javascript -->
     <script>
         $(function () {
-            console.log('acaaaaaaaaaaaaa');
             var today = new Date();
             var y = today.getFullYear();
             var m = today.getMonth();
             var d = today.getDate();
 
             var eventList = {!! json_encode($eventList) !!};
-
-            console.log('eventList: ', eventList);
 
             // Default view
             // color classes: [ fc-event-success | fc-event-info | fc-event-warning | fc-event-danger | fc-event-dark ]
