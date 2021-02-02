@@ -3,7 +3,6 @@
 /public/storage
 /public/vendor
 /public/css
-/public/images/avatars
 /public/images/vendor
 /public/js
 /storage/*.key
@@ -16,6 +15,7 @@ package-lock.json
 composer.lock
 .phpunit.result.cache
 .env.backup
+public/mix-manifest.json
 
 # Vagrant
 /.vagrant
