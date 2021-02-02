@@ -63,8 +63,8 @@
                 nowIndicator: true, // Show "now" indicator
                 firstDay: 1, // Set "Monday" as start of a week
                 businessHours: {
-                    startTime: '09:00',
-                    endTime: '18:00',
+                    startTime: '08:30',
+                    endTime: '18:30',
                     daysOfWeek: [1, 2, 3, 4, 5],
                 },
                 editable: true,
