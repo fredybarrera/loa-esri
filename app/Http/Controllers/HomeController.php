@@ -42,8 +42,8 @@ class HomeController extends Controller
      */
     public function dashboardUser()
     {
-        // return view('home', ['title' => 'Home']);
-        dd('acaaaa user');
+        return view('home', ['title' => 'Home']);
+        // dd('acaaaa user');
     }
 
     /**
@@ -53,8 +53,8 @@ class HomeController extends Controller
      */
     public function dashboardAdmin()
     {
-        // return view('home', ['title' => 'Home']);
-        dd('acaaaa admin');
+        return view('home', ['title' => 'Home']);
+        // dd('acaaaa admin');
     }
 
     /**

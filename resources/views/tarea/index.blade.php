@@ -80,14 +80,16 @@
                     if(info.view.type === "dayGridMonth"){
                         info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
                         ${moment(info.event.start).format('HH:mm')} - 
-                        ${moment(info.event.end).format('HH:mm')}<br />
+                        ${moment(info.event.end).format('HH:mm')} 
+                        <span style="font-weight: bold;float: right;">${info.event.extendedProps.horas}hh</span><br />
                         <b>${info.event.extendedProps.iniciativa}</b></span>`;
                     }else{
                         html_button= '<button type="button" class="btn btn-sm btn-outline-danger rounded-pill removebtn" style="position: absolute;bottom: 15px;right: 15px;" title="Eliminar tarea"><span class="ion ion-md-trash d-block"></span></button>';
                         $(info.el).append(html_button);
                         info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
                         ${moment(info.event.start).format('HH:mm')} - 
-                        ${moment(info.event.end).format('HH:mm')}<br />
+                        ${moment(info.event.end).format('HH:mm')}
+                        <span style="font-weight: bold;float: right;">${info.event.extendedProps.horas}hh</span><br />
                         <b>${info.event.extendedProps.iniciativa}</b><br />
                         ${info.event.extendedProps.observaciones}</span>`;
                     }
@@ -197,6 +199,7 @@
                                     if(response.status == 'success')
                                     {
                                         eventData['id'] = response.id;
+                                        eventData['horas'] = response.horas;
                                         console.log('eventData success: ', eventData);
                                         defaultCalendar.addEvent(eventData);
                                         $('#fullcalendar-default-view-modal').modal('hide');
@@ -251,7 +254,6 @@
                             
                             var event = defaultCalendar.getEventById(info.event.id);
                             event.remove();
-                            defaultCalendar.addEvent(eventData);
                             
                             $.ajax({
                                 url: 'actualizar-tarea',
@@ -260,6 +262,8 @@
                                 success: function(response) {
                                     if(response.status == 'success')
                                     {
+                                        eventData['horas'] = response.horas;
+                                        defaultCalendar.addEvent(eventData);
                                         $('#fullcalendar-default-view-modal').modal('hide');
                                     }
                                 },
@@ -328,6 +332,7 @@
                                     cod_ticket: info.event.extendedProps.cod_ticket,
                                     id: info.event.id
                                 }
+
                                 $.ajax({
                                     url: 'actualizar-tarea',
                                     data: eventData,
@@ -335,6 +340,7 @@
                                     success: function(response) {
                                         if(response.status == 'success')
                                         {
+                                            info.event.setExtendedProp('horas', response.horas);
                                             $('#fullcalendar-default-view-modal').modal('hide');
                                         }
                                     },

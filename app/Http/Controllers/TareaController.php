@@ -46,6 +46,7 @@ class TareaController extends Controller
                 $data['iniciativa'] = $tarea->ticket->descripcion;
                 $data['observaciones'] = $tarea->observaciones;
                 $data['cod_ticket'] = $tarea->ticket->codigo;
+                $data['horas'] = $tarea->horas;
                 $data['id'] = $tarea->codigo;
                 $data['start'] = $tarea->fecha_inicio;
                 $data['end'] = $tarea->fecha_fin;
@@ -86,18 +87,14 @@ class TareaController extends Controller
             $date2 = DateTime::createFromFormat('D M d Y H:i:s e+', $fecha_fin);
 
             $diff = $date2->diff($date1);
-            $hours = $diff->h;
-            $hours = $hours + ($diff->days*24);
-
-            if($all_day)
-            {
-                $hours -= 1;
-            }
+            $hh = $diff->h;
+            $mm = $diff->i;
+            $horas = $hh + ($mm / 60);
 
             $req = [
                 'cod_ticket' => $request->input('cod_ticket'),
                 'cod_usuario' =>  $usuario->codigo,
-                'horas' =>  $hours,
+                'horas' =>  $horas,
                 'observaciones' =>  $request->input('observaciones'),
                 'fecha' =>  date("Y-m-d H:i:s"),
                 'fecha_inicio' => $date1->format('Y-m-d H:i:s'),
@@ -108,7 +105,8 @@ class TareaController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'id' => $codigo
+                'id' => $codigo,
+                'horas' => $horas
             ]);
 
         }catch (\Exception $e){
@@ -136,19 +134,15 @@ class TareaController extends Controller
             $date2 = DateTime::createFromFormat('D M d Y H:i:s e+', $fecha_fin);
 
             $diff = $date2->diff($date1);
-            $hours = $diff->h;
-            if($hours > 0)
-            {
+            $hh = $diff->h;
+            $mm = $diff->i;
+            $horas = $hh + ($mm / 60);
 
-            }else{
-                $minutes = $diff->i;
-                $hours = $minutes / 60;
-            }
 
             $req = [
                 'cod_ticket' => $request->input('cod_ticket'),
                 'cod_usuario' =>  $usuario->codigo,
-                'horas' =>  $hours,
+                'horas' =>  $horas,
                 'observaciones' =>  $request->input('observaciones'),
                 'fecha' =>  date("Y-m-d H:i:s"),
                 'fecha_inicio' => $date1->format('Y-m-d H:i:s'),
@@ -160,7 +154,8 @@ class TareaController extends Controller
             Tarea::editar($req, $codigo);
 
             return response()->json([
-                'status' => 'success'
+                'status' => 'success',
+                'horas' => $horas
             ]);
 
         }catch (\Exception $e){

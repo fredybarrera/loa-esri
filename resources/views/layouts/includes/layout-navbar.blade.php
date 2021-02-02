@@ -22,8 +22,8 @@
 
     <div class="navbar-collapse collapse" id="layout-navbar-collapse">
         <div class="navbar-nav align-items-lg-center">
-            <div class="nav-item"><a class="nav-link" href="#">Link 1</a></div>
-            <div class="nav-item"><a class="nav-link" href="#">Link 2</a></div>
+            {{-- <div class="nav-item"><a class="nav-link" href="#">Link 1</a></div> --}}
+            {{-- <div class="nav-item"><a class="nav-link" href="#">Link 2</a></div> --}}
         </div>
     </div>
 
