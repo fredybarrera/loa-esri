@@ -2,9 +2,10 @@
 /public/hot
 /public/storage
 /public/vendor
-/public/vendor/css/*
-/public/css/*
-/public/js/*
+/public/css
+/public/images/avatars
+/public/images/vendor
+/public/js
 /storage/*.key
 /vendor
 .env
