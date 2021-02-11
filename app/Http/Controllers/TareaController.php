@@ -38,6 +38,7 @@ class TareaController extends Controller
             $tickets = Ticket::select('ticket.descripcion', 'ticket.codigo')
                         ->join('usuario_ticket', 'usuario_ticket.cod_ticket', '=', 'ticket.codigo')
                         ->where('usuario_ticket.cod_usuario', $usuario->codigo)
+                        ->where('ticket.activo', 'S')
                         ->orderBy('ticket.descripcion')
                         ->get();
             

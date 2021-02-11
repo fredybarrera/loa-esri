@@ -12,7 +12,7 @@
                 <div class="col-sm-3">
                     <div class="card mb-2 mt-2">
                         <div class="card-header border-0 pb-0">{{$ticket->descripcion}}</div>
-                        <div class="card-body text-center text-success text-xlarge py-3">{{$ticket->horas}} horas</div>
+                        <div class="card-body text-center text-success text-xlarge py-3">{{rtrim(rtrim(number_format($ticket->horas,1,",","."),0),',')}} horas</div>
                         <div class="card-footer border-0 small pt-0">
                             <div class="card-subtitle text-muted mb-1 mt-1">{{$ticket->proyecto}}</div>
                             {{-- <div class="float-right text-success">

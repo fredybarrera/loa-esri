@@ -49,7 +49,7 @@ Auth::routes();
 */
 Route::get('/page-2', 'Page2Controller')->name('page-2');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/dashboard-user', 'HomeController@dashboardUser')->name('dashboard-user');
+Route::get('/dashboard-profesional', 'HomeController@dashboardProfesional')->name('dashboard-profesional');
 Route::get('/dashboard-admin', 'HomeController@dashboardAdmin')->name('dashboard-admin');
 
 Route::post('activar-usuario',[

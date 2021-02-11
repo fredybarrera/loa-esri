@@ -20,8 +20,8 @@ class Define
     | Perfiles de usuario
     |--------------------------------------------------------------------------
     */
-	const PERFIL_ADMIN      = 1;
-    const PERFIL_USUARIO    = 2;
+	const PERFIL_ADMIN          = 1;
+    const PERFIL_PROFESIONAL    = 2;
 	/*
     |--------------------------------------------------------------------------
     | Variables de sesión

@@ -33,8 +33,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // return view('home');
-        return view('home', ['title' => 'Home']);
+        $perfil_activo = Session::get(Define::SESSION_PERFIL_ACTIVO);
+
+        if($perfil_activo->id == Define::PERFIL_PROFESIONAL)
+        {
+            return redirect('dashboard-profesional');
+        }else {
+            return view('home', ['title' => 'Home']);
+        }
+
     }
 
     /**
@@ -42,7 +49,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function dashboardUser()
+    public function dashboardProfesional()
     {
         $usuario = User::find(Auth::user()->id);
         $tickets = Ticket::select('proyecto.nombre as proyecto', 'ticket.descripcion', DB::raw('sum(tarea.horas) as horas'))
@@ -51,6 +58,7 @@ class HomeController extends Controller
                         ->join('tarea', 'ticket.codigo', '=', 'tarea.cod_ticket')
                         ->join('proyecto', 'ticket.cod_proyecto', '=', 'proyecto.codigo')
                         ->where('usuario_ticket.cod_usuario', $usuario->codigo)
+                        ->where('ticket.activo', 'S')
                         ->groupBy('proyecto.nombre', 'ticket.descripcion')
                         ->orderBy('proyecto.nombre')
                         ->get();

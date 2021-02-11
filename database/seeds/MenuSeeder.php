@@ -35,7 +35,7 @@ class MenuSeeder extends Seeder
             ]);
             DB::table('menu')->insert([
                 'nombre'        => 'Home',
-                'link'			=> 'dashboard-user',
+                'link'			=> 'dashboard-profesional',
                 'clase_icono'	=> 'ion ion-ios-home',
                 'orden'			=> 3,
                 'estado' 		=> 1,//\App\Define::ESTADO_ACTIVO,
