@@ -77,7 +77,7 @@
                 },
                 eventRender: function (info) {
                     console.log('eventRender ifo: ', info);
-                    if(info.view.type === "dayGridMonth"){
+                    if(info.view.type === "dayGridMonth" || info.view.type === "timeGridWeek"){
                         info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
                         ${moment(info.event.start).format('HH:mm')} - 
                         ${moment(info.event.end).format('HH:mm')} 
@@ -85,13 +85,24 @@
                         <b>${info.event.extendedProps.iniciativa}</b></span>`;
                     }else{
                         html_button= '<button type="button" class="btn btn-sm btn-outline-danger rounded-pill removebtn" style="position: absolute;bottom: 1px;right: 2px; z-index: 999;" title="Eliminar tarea"><span class="ion ion-md-trash d-block"></span></button>';
-                        $(info.el).append(html_button);
-                        info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
-                        ${moment(info.event.start).format('HH:mm')} - 
-                        ${moment(info.event.end).format('HH:mm')}
-                        <span style="font-weight: bold;">(${info.event.extendedProps.horas}hh)</span><br />
-                        <b>${info.event.extendedProps.iniciativa}</b><br />
-                        ${info.event.extendedProps.observaciones}</span>`;
+                        if(info.event.extendedProps.horas <= 1)
+                        {
+                            $(info.el).append(html_button);
+                            info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
+                            ${moment(info.event.start).format('HH:mm')} - 
+                            ${moment(info.event.end).format('HH:mm')}
+                            <span style="font-weight: bold;">(${info.event.extendedProps.horas}hh)</span>
+                            <b>${info.event.extendedProps.iniciativa}</b> - ${info.event.extendedProps.observaciones}</span>`;
+
+                        }else{
+                            $(info.el).append(html_button);
+                            info.el.firstChild.innerHTML = `<span id="event-${info.event.id}">
+                            ${moment(info.event.start).format('HH:mm')} - 
+                            ${moment(info.event.end).format('HH:mm')}
+                            <span style="font-weight: bold;">(${info.event.extendedProps.horas}hh)</span><br />
+                            <b>${info.event.extendedProps.iniciativa}</b><br />
+                            ${info.event.extendedProps.observaciones}</span>`;
+                        }
                     }
 
                     $(info.el).find(".removebtn").click(function(e) {
@@ -141,11 +152,11 @@
                         $("#txt-observaciones").val("");
                         $("#message-error-tarea").html('').hide();
                         defaultCalendar.unselect();
+                        $("#btn-guardar-tarea").removeClass('disabled').html('Guardar');
                     })
                     .on('submit', function(e) {
-                        e.preventDefault();
-
                         console.log('submit selectionData: ', selectionData);
+                        e.preventDefault();
 
                         //Si se selecciona el dia completo
                         if(selectionData.allDay)
@@ -178,7 +189,8 @@
                         console.log('objStart: ', objStart);
                         console.log('objEnd: ', objEnd);
 
-                        if (observaciones && cod_ticket !== '-1') {
+                        if (cod_ticket !== '-1') {
+                            $("#btn-guardar-tarea").addClass('disabled').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...');
                             var eventData = {
                                 observaciones: observaciones,
                                 iniciativa: iniciativa,
@@ -200,17 +212,19 @@
                                     {
                                         eventData['id'] = response.id;
                                         eventData['horas'] = response.horas;
+                                        eventData['className'] = response.className;
                                         console.log('eventData success: ', eventData);
                                         defaultCalendar.addEvent(eventData);
                                         $('#fullcalendar-default-view-modal').modal('hide');
                                     }
                                 },
                                 error: function(e) {
+                                    $("#btn-guardar-tarea").removeClass('disabled').html('Guardar');
                                     $("#message-error-tarea").html(e.responseJSON.message).show();
                                 }
                             });
                         }else{
-                            $("#message-error-tarea").html('Debe ingresar iniciativa y observación.').show();
+                            $("#message-error-tarea").html('Debe ingresar iniciativa.').show();
                         }
                     })
                     .modal('show');
@@ -241,13 +255,13 @@
                         console.log('observaciones: ', observaciones);
                         console.log('cod_ticket: ', cod_ticket);
 
-                        if (observaciones && cod_ticket !== '-1') {
+                        if (cod_ticket !== '-1') {
                             var eventData = {
                                 observaciones: observaciones,
                                 iniciativa: iniciativa,
                                 start: info.event.start,
                                 end: info.event.end,
-                                className: null,
+                                className: info.event.className,
                                 cod_ticket: cod_ticket,
                                 id: info.event.id
                             }
@@ -262,7 +276,9 @@
                                 success: function(response) {
                                     if(response.status == 'success')
                                     {
+                                        // info.event.setExtendedProp('horas', response.horas);
                                         eventData['horas'] = response.horas;
+                                        eventData['className'] = response.className;
                                         defaultCalendar.addEvent(eventData);
                                         $('#fullcalendar-default-view-modal').modal('hide');
                                     }
@@ -273,7 +289,7 @@
                                 }
                             });
                         }else{
-                            $("#message-error-tarea").html('Debe ingresar iniciativa y observación.').show();
+                            $("#message-error-tarea").html('Debe ingresar iniciativa.').show();
                         }
                     })
                     .modal('show');
@@ -292,7 +308,7 @@
                                     iniciativa: info.event.extendedProps.iniciativa,
                                     start: info.event.start,
                                     end: info.event.end,
-                                    className: null,
+                                    className: info.event.className,
                                     cod_ticket: info.event.extendedProps.cod_ticket,
                                     id: info.event.id
                                 }
@@ -328,7 +344,7 @@
                                     iniciativa: info.event.extendedProps.iniciativa,
                                     start: info.event.start,
                                     end: info.event.end,
-                                    className: null,
+                                    className: info.event.className,
                                     cod_ticket: info.event.extendedProps.cod_ticket,
                                     id: info.event.id
                                 }
@@ -389,14 +405,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Observaciones</label>
-                        <textarea class="form-control" id="txt-observaciones" placeholder="Observaciones"></textarea>
+                        <label class="form-label">Detalle</label>&nbsp;<small class="form-text text-muted" style="display: inline;">(Opcional)</small>
+                        <input type="text" class="form-control" id="txt-observaciones" placeholder="Detalle">
                     </div>
                     <div id="message-error-tarea" class="alert alert-dark-danger fade show" style="display: none;"></div>
                 </div>
                 <div class="modal-footer modal-tarea">
                     <button type="button" class="btn btn-default md-btn-flat" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary md-btn-flat">Guardar</button>
+                    <button type="submit" class="btn btn-primary md-btn-flat" id="btn-guardar-tarea">Guardar</button>
                 </div>
             </div>
         </div>

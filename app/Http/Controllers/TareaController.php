@@ -7,6 +7,7 @@ use App\Custom;
 use App\Tarea;
 use App\User;
 use App\Ticket;
+use App\Define;
 use Auth;
 use DB;
 use DateTime;
@@ -50,6 +51,7 @@ class TareaController extends Controller
                 $data['id'] = $tarea->codigo;
                 $data['start'] = $tarea->fecha_inicio;
                 $data['end'] = $tarea->fecha_fin;
+                $data['className'] = ($tarea->ticket->codigo == Define::TICKET_VACACIONES) ? 'fc-event-danger' : 'fc-event-info';
                 $eventList[] = $data;
             }
 
@@ -110,11 +112,13 @@ class TareaController extends Controller
             ];
 
             $codigo = Tarea::crear($req);
+            $className = ($request->input('cod_ticket') == Define::TICKET_VACACIONES) ? 'fc-event-danger' : 'fc-event-info';
 
             return response()->json([
                 'status' => 'success',
                 'id' => $codigo,
-                'horas' => $horas
+                'horas' => $horas,
+                'className' => $className
             ]);
 
         }catch (\Exception $e){
@@ -167,10 +171,12 @@ class TareaController extends Controller
             $codigo = $request->input('id');
 
             Tarea::editar($req, $codigo);
+            $className = ($request->input('cod_ticket') == Define::TICKET_VACACIONES) ? 'fc-event-danger' : 'fc-event-info';
 
             return response()->json([
                 'status' => 'success',
-                'horas' => $horas
+                'horas' => $horas,
+                'className' => $className
             ]);
 
         }catch (\Exception $e){

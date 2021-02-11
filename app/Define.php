@@ -51,6 +51,12 @@ class Define
     const VALIDACION_SI  = 1;
     const VALIDACION_NO  = 2;
     /*
+    |--------------------------------------------------------------------------
+    | Tickets
+    |--------------------------------------------------------------------------
+    */
+    const TICKET_VACACIONES  = 81;
+    /*
 
     /**
      * Retorna los tipos de Menús

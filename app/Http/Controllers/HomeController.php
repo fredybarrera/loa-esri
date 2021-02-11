@@ -8,6 +8,7 @@ use App\Custom;
 use App\Perfil;
 use App\Define;
 use App\Tarea;
+use App\Ticket;
 
 use Session;
 use Auth;
@@ -43,8 +44,21 @@ class HomeController extends Controller
      */
     public function dashboardUser()
     {
-        return view('home', ['title' => 'Home']);
-        // dd('acaaaa user');
+        $usuario = User::find(Auth::user()->id);
+        $tickets = Ticket::select('proyecto.nombre as proyecto', 'ticket.descripcion', DB::raw('sum(tarea.horas) as horas'))
+                        ->join('usuario_ticket', 'usuario_ticket.cod_ticket', '=', 'ticket.codigo')
+                        ->join('usuario', 'usuario_ticket.cod_usuario', '=', 'usuario.codigo')
+                        ->join('tarea', 'ticket.codigo', '=', 'tarea.cod_ticket')
+                        ->join('proyecto', 'ticket.cod_proyecto', '=', 'proyecto.codigo')
+                        ->where('usuario_ticket.cod_usuario', $usuario->codigo)
+                        ->groupBy('proyecto.nombre', 'ticket.descripcion')
+                        ->orderBy('proyecto.nombre')
+                        ->get();
+        
+        return view('home-profesional', [
+            'title' => 'Home',
+            'tickets' => $tickets
+        ]);
     }
 
     /**
