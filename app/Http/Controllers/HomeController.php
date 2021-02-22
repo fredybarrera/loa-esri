@@ -39,7 +39,7 @@ class HomeController extends Controller
         {
             return redirect('dashboard-profesional');
         }else {
-            return view('home', ['title' => 'Home']);
+            return redirect('dashboard-admin');
         }
 
     }
@@ -76,8 +76,26 @@ class HomeController extends Controller
      */
     public function dashboardAdmin()
     {
-        return view('home', ['title' => 'Home']);
-        // dd('acaaaa admin');
+        $usuario = User::find(Auth::user()->id);
+
+        $proyectos = Ticket::select('p.nombre as proyecto','ticket.descripcion as iniciativa','ticket.notas','ticket.creacion','ticket.activo as estado','ticket.plazo', 'up.foto', DB::raw("ur.nombres || ' ' || ur.apellidos as responsable"), DB::raw("us.nombres || ' ' || us.apellidos as solicitante"), DB::raw("up.nombres || ' ' || up.apellidos as responsable_proyecto"), DB::raw("array_to_string(array_agg(distinct u2.nombres || ' ' || u2.apellidos || ' - ' || u2.foto), ' , '::text) AS miembros"))
+        ->join('usuario as ur', 'ticket.cod_usuario_res', '=', 'ur.codigo')
+        ->join('usuario as us', 'ticket.cod_usuario_sol', '=', 'us.codigo')
+        ->join('proyecto as p', 'ticket.cod_proyecto', '=', 'p.codigo')
+        ->join('usuario as up', 'p.cod_usuario_res', '=', 'up.codigo')
+        ->join('usuario_ticket', 'usuario_ticket.cod_ticket', '=', 'ticket.codigo')
+        ->join('usuario as u2', 'usuario_ticket.cod_usuario', '=', 'u2.codigo')
+        ->join('tarea', 'ticket.codigo', '=', 'tarea.cod_ticket')
+        ->where('ticket.activo', 'S')
+        ->groupBy('p.codigo','p.nombre','ticket.descripcion','ticket.activo','ticket.notas','ticket.creacion','ticket.plazo','up.foto','ur.nombres','ur.apellidos','us.nombres','us.apellidos','up.nombres','up.apellidos')
+        ->orderBy('ticket.creacion', 'desc')
+        ->offset(0)->limit(30)
+        ->get();
+
+        return view('home-admin', [
+            'title' => 'Home',
+            'proyectos' => $proyectos
+        ]);
     }
 
     /**
