@@ -7,6 +7,8 @@ use DB;
 use App\Custom;
 use App\Perfil;
 use App\User;
+use App\Define;
+use App\Ticket;
 use Auth;
 
 class UsuarioController extends Controller
@@ -79,14 +81,34 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        $item = User::findOrFail($id);
-        $perfiles = Perfil::orderBy('nombre')->get();
+        try{
+            $item = User::findOrFail($id);
+            $perfiles = Perfil::orderBy('nombre')->get();
+            $tickets = Ticket::where('activo', 'S')->orderBy('descripcion')->get();
+            $estados = [Define::ESTADO_ACTIVO => 'Activo', Define::ESTADO_INACTIVO => 'Inactivo'];
+            $user_perfiles  = [];
+            $user_tickets  = [];
 
-        return view('usuario.editar', [
-            'title' => 'Usuarios',
-            'item' => $item,
-            'perfiles' => $perfiles
-        ]);
+            foreach ($item->perfiles as $perfil) {
+                $user_perfiles[] = $perfil->id;
+            }
+
+            foreach ($item->tickets as $ticket) {
+                $user_tickets[] = $ticket->codigo;
+            }
+
+            return view('usuario.editar', [
+                'title' => 'Usuarios',
+                'item' => $item,
+                'perfiles' => $perfiles,
+                'estados' => $estados,
+                'tickets' => $tickets,
+                'user_perfiles' => $user_perfiles,
+                'user_tickets' => $user_tickets
+            ]);
+        }catch (\Exception $e){
+            Custom::error('UsuarioController', 'edit', $e);
+        }
     }
 
     /**
@@ -98,7 +120,29 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $req = $request->all();
+            $validator = User::validaEditar($request, $id);
+            
+            if ($validator->fails())
+            {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            User::editarUsuario($req, $id);
+
+            return redirect()->route('usuario.index')->with([
+                'title'   => 'Exito',
+                'message' => 'Usuario editado correctamente',
+                'type'    => 'success'
+            ]);
+            
+        }catch (\Exception $e){
+            Custom::error('UsuarioController', 'update', $e);
+        }
     }
 
     /**

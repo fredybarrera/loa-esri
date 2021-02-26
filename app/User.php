@@ -5,10 +5,14 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
-use App\Define;
+use Validator;
+use Storage;
+use File;
+use DB;
 use Session;
 use Auth;
+use App\Custom;
+use App\Define;
 
 class User extends Authenticatable
 {
@@ -61,13 +65,24 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Perfil', 'usuario_perfil', 'usuario_id', 'perfil_id')->orderBy('nombre');
     }
 
+    /**
+     * Retorna los tickets que posee el usuario
+     *
+     * @var array
+     */
+    public function tickets()
+    {
+        return $this->belongsToMany('App\Ticket', 'usuario_ticket', 'cod_usuario', 'cod_ticket', 'codigo')->orderBy('descripcion');
+    }
+
 
     
     public static function validaGuardar($request){
 
         $rules = [
-            'nombre'        => 'required',
+            'nombres'       => 'required',
             'apellidos'     => 'required',
+            'nom_usuario'   => 'required',
             'email'         => 'required|email|max:255|unique:usuario',
             'estado'        => 'required',
             'password'      => 'required|same:password_confirmation'
@@ -107,18 +122,72 @@ class User extends Authenticatable
         return $usuario->id;
     }
 
-
     public static function validaEditar($request, $id){
 
         $rules = [
-            'nombre'        => 'required',
+            'nombres'       => 'required',
             'apellidos'     => 'required',
-            'email'         => 'required|email|unique:usuarios,email,'.$id,
+            'nom_usuario'   => 'required',
+            'email'         => 'required|email|unique:usuario,email,'.$id,
             'estado'        => 'required',
             'password'      => 'same:password_confirmation'
         ];
         
         return Validator::make($request->all(), $rules);
+    }
+    
+    public static function editarUsuario($req, $id){
+        try{
+            // DB::enableQueryLog();
+            date_default_timezone_set('America/Santiago');
+
+            $usuario                = Self::findOrFail($id);
+            $usuario->nombres       = $req['nombres'];
+            $usuario->apellidos     = $req['apellidos'];
+            $usuario->nom_usuario   = $req['nom_usuario'];
+            $usuario->estado        = ($req['estado'] == '1' ? Define::ESTADO_ACTIVO : Define::ESTADO_INACTIVO);
+            $usuario->email         = $req['email'];
+            if($req['password'] != '') $usuario->password = bcrypt($req['password']);
+            $usuario->save();
+
+            // Custom::log('UsuarioController', 'update', [
+            //     'id' => $id,
+            //     'nombre' => $req['nombre'] .''. $req['apellidos'],
+            //     'correo' => $req['email'],
+            //     'fecha' => date("Y-m-d H:i:s")
+            // ]);
+
+            //borro los perfiles anteriores
+            DB::table('usuario_perfil')->where('usuario_id', $usuario->id)->delete();
+            
+            if(isset($req['perfil_id']))
+            {
+                foreach ($req['perfil_id'] as $key => $perfil_id) {
+                    DB::table('usuario_perfil')->insert([
+                        'usuario_id' => $usuario->id,
+                        'perfil_id' => $perfil_id
+                    ]);
+                }
+            }
+
+            //borro los tickets anteriores
+            DB::table('usuario_ticket')->where('cod_usuario', $usuario->codigo)->delete();
+            if(isset($req['ticket_id']))
+            {
+                foreach ($req['ticket_id'] as $key => $cod_ticket) {
+                    DB::table('usuario_ticket')->insert([
+                        'cod_usuario' => $usuario->codigo,
+                        'cod_ticket' => intval($cod_ticket),
+                        'horas' => 40
+                    ]);
+                }
+            }
+            
+            // $queryLog = DB::getQueryLog();
+            
+        }catch (\Exception $e){
+            Custom::error('User', 'editarUsuario', $e);
+        }
     }
 
 
@@ -132,37 +201,6 @@ class User extends Authenticatable
         ];
         
         return Validator::make($request->all(), $rules);
-    }
-
-
-    public static function editarUsuario($req, $id){
-        
-        date_default_timezone_set('America/Santiago');
-
-        $usuario                = Self::findOrFail($id);
-        $usuario->nombre        = $req['nombre'];
-        $usuario->apellidos     = $req['apellidos'];
-        $usuario->estado        = ($req['estado'] == '1' ? Define::ESTADO_ACTIVO : Define::ESTADO_INACTIVO);
-        $usuario->email         = $req['email'];
-        if($req['password'] != '') $usuario->password = bcrypt($req['password']);
-        $usuario->save();
-
-        Custom::log('UsuarioController', 'update', [
-            'id' => $id,
-            'nombre' => $req['nombre'] .''. $req['apellidos'],
-            'correo' => $req['email'],
-            'fecha' => date("Y-m-d H:i:s")
-        ]);
-
-        //borro los anteriores
-        DB::table('usuario_perfil')->where('usuario_id', $usuario->id)->delete();
-
-        foreach ($req['perfil_id'] as $key => $perfil_id) {
-            DB::table('usuario_perfil')->insert([
-                'usuario_id'    => $usuario->id,
-                'perfil_id'     => $perfil_id
-            ]);
-        }
     }
 
 
