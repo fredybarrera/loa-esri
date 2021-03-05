@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 // verificacion de ruteo en caso que un usuario este logueado o no 
 Route::get('/', function () {
-
     if(Auth::check())
     {
         return redirect()->guest('escogerPerfil');

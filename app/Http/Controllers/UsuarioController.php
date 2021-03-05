@@ -48,7 +48,20 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        //
+        try{
+            $perfiles = Perfil::orderBy('nombre')->get();
+            $tickets = Ticket::where('activo', 'S')->orderBy('descripcion')->get();
+            $estados = [Define::ESTADO_ACTIVO => 'Activo', Define::ESTADO_INACTIVO => 'Inactivo'];
+
+            return view('usuario.crear', [
+                'title' => 'Usuarios',
+                'perfiles' => $perfiles,
+                'tickets' => $tickets,
+                'estados' => $estados
+            ]);
+        }catch (\Exception $e){
+            Custom::error('UsuarioController', 'create', $e);
+        }
     }
 
     /**
@@ -59,7 +72,29 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $req = $request->all();
+            $validator = User::validaGuardar($request);
+            
+            if ($validator->fails())
+            {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $id = User::crearUsuario($req);
+
+            return redirect()->back()->with([
+                'title'   => 'Exito',
+                'message' => 'Usuario creado correctamente',
+                'type'    => 'success'
+            ]);
+            
+        }catch (\Exception $e){
+            Custom::error('UsuarioController', 'store', $e);
+        }
     }
 
     /**
@@ -134,11 +169,17 @@ class UsuarioController extends Controller
 
             User::editarUsuario($req, $id);
 
-            return redirect()->route('usuario.index')->with([
+            return redirect()->back()->with([
                 'title'   => 'Exito',
                 'message' => 'Usuario editado correctamente',
                 'type'    => 'success'
             ]);
+
+            // return redirect()->route('usuario.index')->with([
+            //     'title'   => 'Exito',
+            //     'message' => 'Usuario editado correctamente',
+            //     'type'    => 'success'
+            // ]);
             
         }catch (\Exception $e){
             Custom::error('UsuarioController', 'update', $e);

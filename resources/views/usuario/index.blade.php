@@ -77,9 +77,11 @@
 @endsection
 
 @section('content')
-    <h4 class="font-weight-bold py-3 mb-4">
+    <h4 class="font-weight-bold py-3 mb-1">
         <span class="text-muted font-weight-light">Mantenedores /</span> Usuarios
     </h4>
+    <a href="{{ route('usuario.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
+
     <!-- DataTable within card -->
     <div class="card">
         {{-- <h6 class="card-header">Usuarios</h6> --}}

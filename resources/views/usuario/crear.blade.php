@@ -33,7 +33,7 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-4">
-        Editar usuario <span class="text-muted">{{ $item->nom_usuario }}</span>
+        Crear usuario
     </h4>
     @if(session()->has('message'))
         <div class="alert alert-{{ (session()->get('type') == 'success') ? 'success' : 'danger' }} alert-dismissible">
@@ -52,8 +52,7 @@
             </ul>
         </div>
     @endif
-    <form method="POST" action="{{ route('usuario.update', $item->id) }}" accept-charset="UTF-8" enctype="multipart/form-data">
-        @method('PATCH')
+    <form method="POST" action="{{ route('usuario.store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
         @csrf
         <div class="nav-tabs-top">
             <ul class="nav nav-tabs">
@@ -68,7 +67,7 @@
                 <div class="tab-pane fade show active" id="user-edit-account">
                     <div class="card-body">
                         <div class="media align-items-center">
-                            <img src="/images/avatars/{{ $item->foto }}" alt="" class="d-block ui-w-80">
+                            <img src="/images/avatars/sin_foto.png" alt="" class="d-block ui-w-80">
                             <div class="media-body ml-3">
                                 <label class="form-label d-block mb-2">Avatar</label>
                                 {{-- <label class="btn btn-outline-primary btn-sm">Change<input type="file" class="user-edit-fileinput"></label>&nbsp;
@@ -80,42 +79,33 @@
                     <div class="card-body pb-2">
                         <div class="form-group">
                             <label class="form-label">Nombres</label>
-                            <input type="text" name="nombres" class="form-control mb-1" value="{{$item->nombres}}" required>
+                            <input type="text" name="nombres" class="form-control mb-1" value="{{ old('nombres') }}" required>
                             {{-- <a href="javascript:void(0)" class="small">Reset password</a> --}}
                         </div>
                         <div class="form-group">
                             <label class="form-label">Apellidos</label>
-                            <input type="text" name="apellidos" class="form-control" value="{{$item->apellidos}}" required>
+                            <input type="text" name="apellidos" class="form-control" value="{{ old('apellidos') }}" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Nombre de usuario</label>
-                            <input type="text" name="nom_usuario" class="form-control" value="{{$item->nom_usuario}}" required>
+                            <input type="text" name="nom_usuario" class="form-control" value="{{ old('nom_usuario') }}" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">E-mail</label>
-                            <input type="email" name="email" class="form-control mb-1" value="{{$item->email}}" required>
+                            <input type="email" name="email" class="form-control mb-1" value="{{ old('email') }}" required>
                             {{-- <a href="javascript:void(0)" class="small">Resend confirmation</a> --}}
                         </div>
                         <div class="form-group">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control mb-1 is-valid" value="">
-                            <span class="valid-feedback">Dejar en blanco si no la desea cambiar.</span>
+                            <input type="password" name="password" class="form-control mb-1" value="" required>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Confirmación de password</label>
-                            <input type="password" name="password_confirmation" class="form-control mb-1 is-valid" value="">
-                            <span class="valid-feedback">Dejar en blanco si no la desea cambiar.</span>
-                        </div>
+                     
                     {{-- <hr class="border-light m-0"> --}}
                         <div class="form-group">
                             <label class="form-label">Estado</label>
                             <select name="estado" class="custom-select" required>
                                 @foreach($estados as $key => $value)
-                                    @if($item->estado == $key)
-                                        <option value="{{ $key }}" selected>{{ $value }}</option>
-                                    @else
-                                        <option value="{{ $key }}" >{{ $value }}</option>
-                                    @endif
+                                    <option value="{{ $key }}" >{{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -125,25 +115,17 @@
                     <div class="card-body pb-2">
                         <div class="form-group">
                             <label class="form-label">Perfiles</label>
-                            <select id="sel_perfil_usuario_editar" name="perfil_id[]" multiple class="user-edit-multiselect form-control w-100">
+                            <select id="sel_perfil_usuario_editar" name="perfil_id[]" multiple class="user-edit-multiselect form-control w-100" required>
                                 @foreach ($perfiles as $perfil)
-                                    @if(in_array($perfil->id, $user_perfiles))
-                                        <option value="{{ $perfil->id }}" selected="true">{{ $perfil->nombre }}</option>
-                                    @else
-                                        <option value="{{$perfil->id}}">{{$perfil->nombre}}</option>
-                                    @endif
+                                    <option value="{{$perfil->id}}">{{$perfil->nombre}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Tickets</label>
-                            <select id="sel_ticket_usuario_editar" name="ticket_id[]" class="selectpicker" title="Seleccione uno o mas tickets..." data-style="btn-default" multiple data-icon-base="ion" data-live-search="true" data-tick-icon="ion-md-checkmark" data-selected-text-format="count > 3" data-size="6" data-actions-box="true">
+                            <select id="sel_ticket_usuario_editar" name="ticket_id[]" class="selectpicker" title="Seleccione uno o mas tickets..." data-style="btn-default" multiple data-icon-base="ion" data-live-search="true" data-tick-icon="ion-md-checkmark" data-selected-text-format="count > 3" data-size="6" data-actions-box="true" required>
                                 @foreach ($tickets as $ticket)
-                                    @if(in_array($ticket->codigo, $user_tickets))
-                                        <option value="{{ $ticket->codigo }}" selected="true">{{ $ticket->descripcion }}</option>
-                                    @else
-                                        <option value="{{$ticket->codigo}}">{{$ticket->descripcion}}</option>
-                                    @endif
+                                    <option value="{{$ticket->codigo}}">{{$ticket->descripcion}}</option>
                                 @endforeach
                             </select>
                         </div>

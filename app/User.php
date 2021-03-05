@@ -85,7 +85,7 @@ class User extends Authenticatable
             'nom_usuario'   => 'required',
             'email'         => 'required|email|max:255|unique:usuario',
             'estado'        => 'required',
-            'password'      => 'required|same:password_confirmation'
+            'password'      => 'required'
         ];
                 
         return Validator::make($request->all(), $rules);
@@ -97,26 +97,45 @@ class User extends Authenticatable
         date_default_timezone_set('America/Santiago');
         
         $usuario                = new User;
-        $usuario->nombre        = $req['nombre'];
+        $usuario->nombres       = $req['nombres'];
         $usuario->apellidos     = $req['apellidos'];
+        $usuario->nom_usuario   = $req['nom_usuario'];
         $usuario->foto          = 'sin_foto.png';
+        $usuario->cod_area      = 1;
         $usuario->estado        = ($req['estado'] == '1' ? Define::ESTADO_ACTIVO : Define::ESTADO_INACTIVO);
         $usuario->email         = $req['email'];
+        $usuario->correo         = $req['email'];
         $usuario->password      = bcrypt($req['password']);
         $usuario->save();
 
-        Custom::log('UsuarioController', 'store', [
-            'id' => $usuario->id,
-            'nombre' => $req['nombre'] .''. $req['apellidos'],
-            'correo' => $req['email'],
-            'fecha' => date("Y-m-d H:i:s")
-        ]);
+        // Custom::log('UsuarioController', 'store', [
+        //     'id' => $usuario->id,
+        //     'nombre' => $req['nombre'] .''. $req['apellidos'],
+        //     'correo' => $req['email'],
+        //     'fecha' => date("Y-m-d H:i:s")
+        // ]);
 
-        foreach ($req['perfil_id'] as $key => $perfil_id) {
-            DB::table('usuario_perfil')->insert([
-                'usuario_id'    => $usuario->id,
-                'perfil_id'     => $perfil_id
-            ]);
+        $usuario = $usuario->fresh();
+
+        if(isset($req['perfil_id']))
+        {
+            foreach ($req['perfil_id'] as $key => $perfil_id) {
+                DB::table('usuario_perfil')->insert([
+                    'usuario_id' => $usuario->id,
+                    'perfil_id' => $perfil_id
+                ]);
+            }
+        }
+
+        if(isset($req['ticket_id']))
+        {
+            foreach ($req['ticket_id'] as $key => $cod_ticket) {
+                DB::table('usuario_ticket')->insert([
+                    'cod_usuario' => $usuario->codigo,
+                    'cod_ticket' => intval($cod_ticket),
+                    'horas' => 40
+                ]);
+            }
         }
 
         return $usuario->id;

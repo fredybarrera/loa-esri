@@ -57,11 +57,14 @@ class HomeController extends Controller
                         ->join('usuario', 'usuario_ticket.cod_usuario', '=', 'usuario.codigo')
                         ->join('tarea', 'ticket.codigo', '=', 'tarea.cod_ticket')
                         ->join('proyecto', 'ticket.cod_proyecto', '=', 'proyecto.codigo')
+                        ->where('tarea.cod_usuario', $usuario->codigo)
                         ->where('usuario_ticket.cod_usuario', $usuario->codigo)
                         ->where('ticket.activo', 'S')
                         ->groupBy('proyecto.nombre', 'ticket.descripcion')
                         ->orderBy('proyecto.nombre')
                         ->get();
+                        // ->toSql();
+        // dd($tickets);
         
         return view('home-profesional', [
             'title' => 'Home',
