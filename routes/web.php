@@ -37,6 +37,7 @@ Route::get('/', function () {
 // Resources
 Route::resource('tarea', TareaController::class);
 Route::resource('usuario', UsuarioController::class);
+Route::resource('proyecto', ProyectoController::class);
 
 Auth::routes();
 
@@ -51,9 +52,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard-profesional', 'HomeController@dashboardProfesional')->name('dashboard-profesional');
 Route::get('/dashboard-admin', 'HomeController@dashboardAdmin')->name('dashboard-admin');
 
-Route::post('activar-usuario',[
-    'uses' => 'UsuarioController@activarUsuario'
-]);
+
+
 /*
 |--------------------------------------------------------------------------
 | Modulo tareas

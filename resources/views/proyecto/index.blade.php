@@ -23,13 +23,13 @@
             $('.datatables-demo').dataTable();
         });
 
-        $(".link-user-activar").on("click", function(){
+        $(".link-proyecto-activar").on("click", function(){
             var id = $(this).data('id');
-            var resource = 'usuario';
+            var resource = 'proyecto';
             data = {id:id}
             $.ajax({
                 url: '/' + resource + '/' + id,
-                type: 'DELETE',  // user.destroy
+                type: 'DELETE',  // proyecto.destroy
                 success: function(response) {
                     toastr['success'](resource + ' activado con éxito!', 'Confirmación', {
                         positionClass: 'toast-top-right',
@@ -43,19 +43,19 @@
         });
 
 
-        $(".link-user-desactivar").on("click", function(){
+        $(".link-proyecto-desactivar").on("click", function(){
             var id = $(this).data('id');
-            var usuario = $(this).data('usuario');
-            var resource = 'usuario';
+            var resource = 'proyecto';
+            var item = $(this).data(resource);
             bootbox.confirm({
-                message:   '¿Confirma que desea desactivar al usuario <b>'+ usuario +'</b>?',
+                message:   '¿Confirma que desea desactivar el' + resource + ' <b>'+ item +'</b>?',
                 className: 'bootbox-sm',
                 callback: function(result) {
                     if(result)
                     {
                         $.ajax({
                             url: '/' + resource + '/' + id,
-                            type: 'DELETE',  // user.destroy
+                            type: 'DELETE',  // proyecto.destroy
                             success: function(response) {
                                 toastr['success'](resource + ' desactivado con éxito!', 'Confirmación', {
                                     positionClass: 'toast-top-right',
@@ -76,39 +76,39 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-1">
-        <span class="text-muted font-weight-light">Mantenedores /</span> Usuarios
+        <span class="text-muted font-weight-light">Mantenedores /</span> Proyectos
     </h4>
-    <a href="{{ route('usuario.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
+    <a href="{{ route('proyecto.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
 
     <!-- DataTable within card -->
     <div class="card">
-        {{-- <h6 class="card-header">Usuarios</h6> --}}
+        {{-- <h6 class="card-header">Proyectos</h6> --}}
         <div class="card-datatable table-responsive">
             <table class="datatables-demo table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Apellidos</th>
-                        <th>Nombres</th>
-                        <th>Nombre de usuario</th>
-                        <th>Correo</th>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>descripcion</th>
+                        <th>Usuario responsable</th>
                         <th>Estado</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($items as $item)
-                        <tr id="tr-{{$item->id}}" class="{{ ($item->estado == App\Define::ESTADO_INACTIVO) ? 'tachar' : '' }}">
-                            <td>{{ $item->apellidos }}</td>
-                            <td>{{ $item->nombres }}</td>
-                            <td>{{ $item->nom_usuario }}</td>
-                            <td>{{ $item->email }}</td>
+                        <tr id="tr-{{$item->codigo}}" class="{{ ($item->estado == App\Define::ESTADO_INACTIVO) ? 'tachar' : '' }}">
+                            <td>{{ $item->codigo }}</td>
+                            <td>{{ $item->nombre }}</td>
+                            <td>{{ $item->descripcion }}</td>
+                            <td>{{ $item->usuario->nombres }} {{ $item->usuario->apellidos }}</td>
                             <td>{{ ($item->estado == App\Define::ESTADO_ACTIVO) ? 'Activo' : 'Inactivo' }}</td>
                             <td class="center">
-                                <a href="{{ route('usuario.edit', $item->id) }}" class="btn btn-sm btn-outline-info" role="button">Editar</a>
+                                <a href="{{ route('proyecto.edit', $item->codigo) }}" class="btn btn-sm btn-outline-info" role="button">Editar</a>
                                 @if($item->estado == App\Define::ESTADO_ACTIVO)
-                                    <a href="#" data-id="{{$item->id}}" data-usuario="{{$item->nom_usuario}}" class="btn btn-sm btn-outline-danger link-user-desactivar" role="button">Desactivar</a>
+                                    <a href="#" data-id="{{$item->codigo}}" data-proyecto="{{$item->nombre}}" class="btn btn-sm btn-outline-danger link-proyecto-desactivar" role="button">Desactivar</a>
                                 @else
-                                    <a href="#" data-id="{{$item->id}}" data-usuario="{{$item->nom_usuario}}" class="btn btn-sm btn-outline-success link-user-activar" role="button">Activar</a>
+                                    <a href="#" data-id="{{$item->codigo}}" data-proyecto="{{$item->nombre}}" class="btn btn-sm btn-outline-success link-proyecto-activar" role="button">Activar</a>
                                 @endif
                             </td>
                         </tr>

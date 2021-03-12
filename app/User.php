@@ -229,10 +229,10 @@ class User extends Authenticatable
      *
      * @var array
      */
-    public static function desactivar($id){
+    public static function desactivarActivar($id){
         
         $obj = Self::findOrFail($id);
-        $obj->estado = Define::ESTADO_INACTIVO;
+        $obj->estado = ($obj->estado == Define::ESTADO_INACTIVO) ? Define::ESTADO_ACTIVO : Define::ESTADO_INACTIVO;
         $obj->save();
     }
 

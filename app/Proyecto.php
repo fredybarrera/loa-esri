@@ -24,7 +24,7 @@ class Proyecto extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'nombre', 'descripcion', 'cod_usuario_res'
+        'codigo', 'nombre', 'descripcion', 'cod_usuario_res', 'estado'
     ];
 
     public function tickets()
@@ -32,65 +32,51 @@ class Proyecto extends Model
         return $this->hasMany('App\Ticket', 'cod_proyecto');
     }
 
-    // public function usuario()
-    // {
-    //     return $this->belongsTo('App\User', 'cod_usuario');
-    // }
+    public function usuario()
+    {
+        return $this->belongsTo('App\User', 'cod_usuario_res', 'codigo');
+    }
 
-    // public static function valida($request){
+    public static function valida($request){
 
-    //     $rules = [
-    //         'cod_ticket'        => 'required|numeric',
-    //         'cod_usuario'       => 'required|numeric',
-    //         'horas'             => 'required|numeric',
-    //         'observaciones'     => 'required',
-    //         'fecha'             => 'required',
-    //         'fecha_inicio'      => 'required',
-    //         'fecha_fin'         => 'required',
-    //     ];
+        $rules = [
+            'nombre'            => 'required',
+            'descripcion'       => 'required',
+            'estado'            => 'required',
+            'cod_usuario_res'   => 'required|numeric',
+        ];
 
-    //     return Validator::make($request->all(), $rules);
-    // }
+        return Validator::make($request->all(), $rules);
+    }
 
+    public static function crear($req){
 
-    // public static function crear($req){
+        $obj                    = new Self;
+        $obj->nombre            = $req['nombre'];
+        $obj->descripcion       = $req['descripcion'];
+        $obj->cod_usuario_res   = $req['cod_usuario_res'];
+        $obj->estado            = $req['estado'];
+        $obj->save();
+    }
 
-    //     $obj                  = new Self;
-    //     $obj->cod_ticket      = $req['cod_ticket'];
-    //     $obj->cod_usuario     = $req['cod_usuario'];
-    //     $obj->horas           = $req['horas'];
-    //     $obj->observaciones   = $req['observaciones'];
-    //     $obj->fecha           = $req['fecha'];
-    //     $obj->fecha_inicio    = $req['fecha_inicio'];
-    //     $obj->fecha_fin       = $req['fecha_fin'];
-    //     $obj->save();
-
-    //     return $obj->codigo;
-    // }
-
-
-    // public static function editar($req, $id){
-
-    //     $obj                    = Self::findOrFail($id);
-    //     $obj->cod_ticket        = $req['cod_ticket'];
-    //     $obj->cod_usuario       = $req['cod_usuario'];
-    //     $obj->horas             = $req['horas'];
-    //     $obj->observaciones     = $req['observaciones'];
-    //     $obj->fecha             = $req['fecha'];
-    //     $obj->fecha_inicio      = $req['fecha_inicio'];
-    //     $obj->fecha_fin         = $req['fecha_fin'];
-    //     $obj->save();
-    // }
+    public static function editar($req, $id){
+        $obj                    = Self::findOrFail($id);
+        $obj->nombre            = $req['nombre'];
+        $obj->descripcion       = $req['descripcion'];
+        $obj->cod_usuario_res   = $req['cod_usuario_res'];
+        $obj->estado            = $req['estado'];
+        $obj->save();
+    }
 
 
-    /**
+     /**
+     * Inactiva el proyecto.
      * @var array
      */
-    // public static function eliminar($id){
+    public static function desactivarActivar($id){
         
-    //     $obj = Self::findOrFail($id);
-    //     $obj->delete();
-
-    //     return true;      
-    // }
+        $obj = Self::findOrFail($id);
+        $obj->estado = ($obj->estado == Define::ESTADO_INACTIVO) ? Define::ESTADO_ACTIVO : Define::ESTADO_INACTIVO;
+        $obj->save();
+    }
 }

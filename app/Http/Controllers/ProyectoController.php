@@ -9,11 +9,11 @@ use App\Perfil;
 use App\User;
 use App\Define;
 use App\Ticket;
+use App\Proyecto;
 use Auth;
 
-class UsuarioController extends Controller
+class ProyectoController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -33,10 +33,10 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $items = User::orderBy('apellidos')->get();
+        $items = Proyecto::orderBy('nombre')->get();
 
-        return view('usuario.index', [
-            'title' => 'Usuarios',
+        return view('proyecto.index', [
+            'title' => 'Proyectos',
             'items' => $items
         ]);
     }
@@ -49,18 +49,16 @@ class UsuarioController extends Controller
     public function create()
     {
         try{
-            $perfiles = Perfil::orderBy('nombre')->get();
-            $tickets = Ticket::where('activo', 'S')->orderBy('descripcion')->get();
+            $usuarios = User::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombres')->get();
             $estados = Define::getEstados();
 
-            return view('usuario.crear', [
-                'title' => 'Usuarios',
-                'perfiles' => $perfiles,
-                'tickets' => $tickets,
+            return view('proyecto.crear', [
+                'title' => 'Proyectos',
+                'usuarios' => $usuarios,
                 'estados' => $estados
             ]);
         }catch (\Exception $e){
-            Custom::error('UsuarioController', 'create', $e);
+            Custom::error('ProyectoController', 'create', $e);
         }
     }
 
@@ -74,7 +72,7 @@ class UsuarioController extends Controller
     {
         try{
             $req = $request->all();
-            $validator = User::validaGuardar($request);
+            $validator = Proyecto::valida($request);
             
             if ($validator->fails())
             {
@@ -84,16 +82,16 @@ class UsuarioController extends Controller
                     ->withInput();
             }
 
-            $id = User::crearUsuario($req);
+            Proyecto::crear($req);
 
-            return redirect()->back()->with([
+            return redirect()->route('proyecto.index')->with([
                 'title'   => 'Exito',
-                'message' => 'Usuario creado correctamente',
+                'message' => 'Proyecto editado correctamente',
                 'type'    => 'success'
             ]);
             
         }catch (\Exception $e){
-            Custom::error('UsuarioController', 'store', $e);
+            Custom::error('ProyectoController', 'store', $e);
         }
     }
 
@@ -117,32 +115,18 @@ class UsuarioController extends Controller
     public function edit($id)
     {
         try{
-            $item = User::findOrFail($id);
-            $perfiles = Perfil::orderBy('nombre')->get();
-            $tickets = Ticket::where('activo', 'S')->orderBy('descripcion')->get();
+            $item = Proyecto::findOrFail($id);
+            $usuarios = User::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombres')->get();
             $estados = Define::getEstados();
-            $user_perfiles  = [];
-            $user_tickets  = [];
 
-            foreach ($item->perfiles as $perfil) {
-                $user_perfiles[] = $perfil->id;
-            }
-
-            foreach ($item->tickets as $ticket) {
-                $user_tickets[] = $ticket->codigo;
-            }
-
-            return view('usuario.editar', [
-                'title' => 'Usuarios',
+            return view('proyecto.editar', [
                 'item' => $item,
-                'perfiles' => $perfiles,
+                'title' => 'Proyecto',
                 'estados' => $estados,
-                'tickets' => $tickets,
-                'user_perfiles' => $user_perfiles,
-                'user_tickets' => $user_tickets
+                'usuarios' => $usuarios
             ]);
         }catch (\Exception $e){
-            Custom::error('UsuarioController', 'edit', $e);
+            Custom::error('ProyectoController', 'edit', $e);
         }
     }
 
@@ -157,7 +141,7 @@ class UsuarioController extends Controller
     {
         try{
             $req = $request->all();
-            $validator = User::validaEditar($request, $id);
+            $validator = proyecto::valida($request, $id);
             
             if ($validator->fails())
             {
@@ -167,22 +151,16 @@ class UsuarioController extends Controller
                     ->withInput();
             }
 
-            User::editarUsuario($req, $id);
+            Proyecto::editar($req, $id);
 
             return redirect()->back()->with([
                 'title'   => 'Exito',
-                'message' => 'Usuario editado correctamente',
+                'message' => 'Proyecto editado correctamente',
                 'type'    => 'success'
             ]);
 
-            // return redirect()->route('usuario.index')->with([
-            //     'title'   => 'Exito',
-            //     'message' => 'Usuario editado correctamente',
-            //     'type'    => 'success'
-            // ]);
-            
         }catch (\Exception $e){
-            Custom::error('UsuarioController', 'update', $e);
+            Custom::error('ProyectoController', 'update', $e);
         }
     }
 
@@ -196,14 +174,14 @@ class UsuarioController extends Controller
     {
         try{
 
-            User::desactivarActivar($id);
+            Proyecto::desactivarActivar($id);
 
             return response()->json([
                 'status' => 'success'
             ]);
 
         }catch (\Exception $e){
-            Custom::error('UsuarioController', 'destroy', $e);
+            Custom::error('ProyectoController', 'destroy', $e);
         }
     }
 }

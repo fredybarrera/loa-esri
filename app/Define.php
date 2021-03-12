@@ -107,6 +107,20 @@ class Define
     }
 
 
+    /**
+     * Retorna las condiciones para una validación
+     *
+     * @var array
+     */
+    public static function getEstados(){
+        
+        return [
+            Define::ESTADO_ACTIVO => 'Activo',
+            Define::ESTADO_INACTIVO => 'Inactivo'
+        ];
+    }
+
+
 
     /**
      * Retorna el lifetime de la sesion
