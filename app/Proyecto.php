@@ -37,12 +37,18 @@ class Proyecto extends Model
         return $this->belongsTo('App\User', 'cod_usuario_res', 'codigo');
     }
 
+    public function tipoProyecto()
+    {
+        return $this->belongsTo('App\TipoProyecto', 'tipo_proyecto_id');
+    }
+
     public static function valida($request){
 
         $rules = [
             'nombre'            => 'required',
             'descripcion'       => 'required',
             'estado'            => 'required',
+            'tipo_proyecto_id'  => 'required',
             'cod_usuario_res'   => 'required|numeric',
         ];
 
@@ -55,6 +61,7 @@ class Proyecto extends Model
         $obj->nombre            = $req['nombre'];
         $obj->descripcion       = $req['descripcion'];
         $obj->cod_usuario_res   = $req['cod_usuario_res'];
+        $obj->tipo_proyecto_id  = $req['tipo_proyecto_id'];
         $obj->estado            = $req['estado'];
         $obj->save();
     }
@@ -64,6 +71,7 @@ class Proyecto extends Model
         $obj->nombre            = $req['nombre'];
         $obj->descripcion       = $req['descripcion'];
         $obj->cod_usuario_res   = $req['cod_usuario_res'];
+        $obj->tipo_proyecto_id  = $req['tipo_proyecto_id'];
         $obj->estado            = $req['estado'];
         $obj->save();
     }

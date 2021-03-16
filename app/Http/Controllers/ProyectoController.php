@@ -10,6 +10,7 @@ use App\User;
 use App\Define;
 use App\Ticket;
 use App\Proyecto;
+use App\TipoProyecto;
 use Auth;
 
 class ProyectoController extends Controller
@@ -36,7 +37,7 @@ class ProyectoController extends Controller
         $items = Proyecto::orderBy('nombre')->get();
 
         return view('proyecto.index', [
-            'title' => 'Proyectos',
+            'title' => 'Iniciativas',
             'items' => $items
         ]);
     }
@@ -50,12 +51,14 @@ class ProyectoController extends Controller
     {
         try{
             $usuarios = User::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombres')->get();
+            $tipo_proyectos = TipoProyecto::orderBy('nombre')->get();
             $estados = Define::getEstados();
 
             return view('proyecto.crear', [
-                'title' => 'Proyectos',
+                'title' => 'Iniciativas',
                 'usuarios' => $usuarios,
-                'estados' => $estados
+                'estados' => $estados,
+                'tipo_proyectos' => $tipo_proyectos
             ]);
         }catch (\Exception $e){
             Custom::error('ProyectoController', 'create', $e);
@@ -117,13 +120,15 @@ class ProyectoController extends Controller
         try{
             $item = Proyecto::findOrFail($id);
             $usuarios = User::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombres')->get();
+            $tipo_proyectos = TipoProyecto::orderBy('nombre')->get();
             $estados = Define::getEstados();
 
             return view('proyecto.editar', [
                 'item' => $item,
                 'title' => 'Proyecto',
                 'estados' => $estados,
-                'usuarios' => $usuarios
+                'usuarios' => $usuarios,
+                'tipo_proyectos' => $tipo_proyectos
             ]);
         }catch (\Exception $e){
             Custom::error('ProyectoController', 'edit', $e);

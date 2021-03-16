@@ -76,7 +76,7 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-1">
-        <span class="text-muted font-weight-light">Mantenedores /</span> Proyectos
+        <span class="text-muted font-weight-light">Mantenedores /</span> Iniciativas
     </h4>
     <a href="{{ route('proyecto.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
 
@@ -89,7 +89,8 @@
                     <tr>
                         <th>Codigo</th>
                         <th>Nombre</th>
-                        <th>descripcion</th>
+                        <th>Descripción</th>
+                        <th>Tipo proyecto</th>
                         <th>Usuario responsable</th>
                         <th>Estado</th>
                         <th>&nbsp;</th>
@@ -101,6 +102,7 @@
                             <td>{{ $item->codigo }}</td>
                             <td>{{ $item->nombre }}</td>
                             <td>{{ $item->descripcion }}</td>
+                            <td>{{ $item->tipoProyecto->nombre }}</td>
                             <td>{{ $item->usuario->nombres }} {{ $item->usuario->apellidos }}</td>
                             <td>{{ ($item->estado == App\Define::ESTADO_ACTIVO) ? 'Activo' : 'Inactivo' }}</td>
                             <td class="center">

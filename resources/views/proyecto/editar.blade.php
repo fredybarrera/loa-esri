@@ -42,6 +42,18 @@
                 <input type="text" name="descripcion" class="form-control" value="{{$item->descripcion}}" required>
             </div>
             <div class="form-group">
+                <label class="form-label">Tipo de proyecto</label>
+                <select name="tipo_proyecto_id" class="custom-select" required>
+                    @foreach($tipo_proyectos as $tipo_proyecto)
+                        @if($item->tipo_proyecto_id == $tipo_proyecto->id)
+                            <option value="{{ $tipo_proyecto->id }}" selected>{{ $tipo_proyecto->nombre }}</option>
+                        @else
+                            <option value="{{ $tipo_proyecto->id }}" >{{ $tipo_proyecto->nombre }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label class="form-label">Usuario responsable</label>
                 <select name="cod_usuario_res" class="custom-select" required>
                     @foreach($usuarios as $usuario)
