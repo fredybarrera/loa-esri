@@ -20,16 +20,18 @@
     <!-- Javascript -->
     <script>
         $(function() {
-            $('.datatables-demo').dataTable();
+            $('.datatables-demo').dataTable({
+                "order": [[ 0, "desc" ]]
+            });
         });
 
-        $(".link-user-activar").on("click", function(){
+        $(".link-ticket-activar").on("click", function(){
             var id = $(this).data('id');
-            var resource = 'usuario';
+            var resource = 'ticket';
             data = {id:id}
             $.ajax({
                 url: '/' + resource + '/' + id,
-                type: 'DELETE',  // user.destroy
+                type: 'DELETE',  // ticket.destroy
                 success: function(response) {
                     toastr['success'](resource + ' activado con éxito!', 'Confirmación', {
                         positionClass: 'toast-top-right',
@@ -42,20 +44,19 @@
             });
         });
 
-
-        $(".link-user-desactivar").on("click", function(){
+        $(".link-ticket-desactivar").on("click", function(){
             var id = $(this).data('id');
-            var usuario = $(this).data('usuario');
-            var resource = 'usuario';
+            var resource = 'ticket';
+            var item = $(this).data(resource);
             bootbox.confirm({
-                message:   '¿Confirma que desea desactivar al usuario <b>'+ usuario +'</b>?',
+                message:   '¿Confirma que desea desactivar el' + resource + ' <b>'+ item +'</b>?',
                 className: 'bootbox-sm',
                 callback: function(result) {
                     if(result)
                     {
                         $.ajax({
                             url: '/' + resource + '/' + id,
-                            type: 'DELETE',  // user.destroy
+                            type: 'DELETE',  // ticket.destroy
                             success: function(response) {
                                 toastr['success'](resource + ' desactivado con éxito!', 'Confirmación', {
                                     positionClass: 'toast-top-right',
@@ -76,9 +77,9 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-1">
-        <span class="text-muted font-weight-light">Mantenedores /</span> Usuarios
+        <span class="text-muted font-weight-light">Mantenedores /</span> Tickets
     </h4>
-    <a href="{{ route('usuario.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
+    <a href="{{ route('ticket.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
     @if(session()->has('message'))
         <div class="alert alert-{{ (session()->get('type') == 'success') ? 'success' : 'danger' }} alert-dismissible">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -88,33 +89,50 @@
 
     <!-- DataTable within card -->
     <div class="card">
-        {{-- <h6 class="card-header">Usuarios</h6> --}}
+        {{-- <h6 class="card-header">tickets</h6> --}}
         <div class="card-datatable table-responsive">
             <table class="datatables-demo table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Apellidos</th>
-                        <th>Nombres</th>
-                        <th>Nombre de usuario</th>
-                        <th>Correo</th>
+                        <th>Codigo</th>
+                        <th>Proyecto</th>
+                        <th>Nombre</th>
+                        <th>Solicitante</th>
+                        <th>Responsable</th>
                         <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Plazo</th>
+                        <th>Usuarios</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($items as $item)
-                        <tr id="tr-{{$item->id}}" class="{{ ($item->estado == App\Define::ESTADO_INACTIVO) ? 'tachar' : '' }}">
-                            <td>{{ $item->apellidos }}</td>
-                            <td>{{ $item->nombres }}</td>
-                            <td>{{ $item->nom_usuario }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ ($item->estado == App\Define::ESTADO_ACTIVO) ? 'Activo' : 'Inactivo' }}</td>
+                        <tr id="tr-{{$item->codigo}}" class="{{ ($item->activo == App\Define::ESTADO_INACTIVO_TEXTO) ? 'tachar' : '' }}">
+                            <td>{{ $item->codigo }}</td>
+                            <td>{{ $item->proyecto->nombre }}</td>
+                            <td>{{ $item->descripcion }}</td>
+                            <td>{{ $item->responsable->nom_usuario }}</td>
+                            <td>{{ $item->solicitante->nom_usuario }}</td>
+                            <td>{{ ($item->activo == App\Define::ESTADO_ACTIVO_TEXTO) ? 'Activo' : 'Inactivo' }}</td>
+                            <td>{{ $item->creacion }}</td>
+                            <td>{{ date('Y-m-d', strtotime($item->plazo)) }}</td>
+                            <td>
+                                @php
+                                    if(sizeof($item->usuarios)>0)
+                                    {
+                                        foreach ($item->usuarios as $usuario) {
+                                            echo '<li>' . $usuario->nom_usuario . '</li>';
+                                        }
+                                    }
+                                @endphp
+                            </td>
                             <td class="center">
-                                <a href="{{ route('usuario.edit', $item->id) }}" class="btn btn-sm btn-outline-info" role="button">Editar</a>
-                                @if($item->estado == App\Define::ESTADO_ACTIVO)
-                                    <a href="#" data-id="{{$item->id}}" data-usuario="{{$item->nom_usuario}}" class="btn btn-sm btn-outline-danger link-user-desactivar" role="button">Desactivar</a>
+                                <a href="{{ route('ticket.edit', $item->codigo) }}" class="btn btn-sm btn-outline-info" role="button">Editar</a>
+                                @if($item->activo == App\Define::ESTADO_ACTIVO_TEXTO)
+                                    <a href="#" data-id="{{$item->codigo}}" data-ticket="{{$item->nombre}}" class="btn btn-sm btn-outline-danger link-ticket-desactivar" role="button">Desactivar</a>
                                 @else
-                                    <a href="#" data-id="{{$item->id}}" data-usuario="{{$item->nom_usuario}}" class="btn btn-sm btn-outline-success link-user-activar" role="button">Activar</a>
+                                    <a href="#" data-id="{{$item->codigo}}" data-ticket="{{$item->nombre}}" class="btn btn-sm btn-outline-success link-ticket-activar" role="button">Activar</a>
                                 @endif
                             </td>
                         </tr>

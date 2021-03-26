@@ -10,10 +10,9 @@ use App\User;
 use App\Define;
 use App\Ticket;
 use App\Proyecto;
-use App\TipoProyecto;
 use Auth;
 
-class ProyectoController extends Controller
+class TicketController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -34,10 +33,10 @@ class ProyectoController extends Controller
      */
     public function index()
     {
-        $items = Proyecto::orderBy('nombre')->get();
+        $items = Ticket::orderBy('codigo')->get();
 
-        return view('proyecto.index', [
-            'title' => 'Iniciativas',
+        return view('ticket.index', [
+            'title' => 'Tickets',
             'items' => $items
         ]);
     }
@@ -51,17 +50,17 @@ class ProyectoController extends Controller
     {
         try{
             $usuarios = User::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombres')->get();
-            $tipo_proyectos = TipoProyecto::orderBy('nombre')->get();
-            $estados = Define::getEstados();
+            $proyectos = Proyecto::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombre')->get();
+            $estados = Define::getEstadosTexto();
 
-            return view('proyecto.crear', [
-                'title' => 'Iniciativas',
+            return view('ticket.crear', [
+                'title' => 'Ticket',
                 'usuarios' => $usuarios,
                 'estados' => $estados,
-                'tipo_proyectos' => $tipo_proyectos
+                'proyectos' => $proyectos
             ]);
         }catch (\Exception $e){
-            Custom::error('ProyectoController', 'create', $e);
+            Custom::error('TicketController', 'create', $e);
         }
     }
 
@@ -75,7 +74,7 @@ class ProyectoController extends Controller
     {
         try{
             $req = $request->all();
-            $validator = Proyecto::valida($request);
+            $validator = Ticket::valida($request);
             
             if ($validator->fails())
             {
@@ -85,16 +84,16 @@ class ProyectoController extends Controller
                     ->withInput();
             }
 
-            Proyecto::crear($req);
+            Ticket::crear($req);
 
-            return redirect()->route('proyecto.index')->with([
+            return redirect()->route('ticket.index')->with([
                 'title'   => 'Exito',
-                'message' => 'Proyecto creado correctamente',
+                'message' => 'Ticket creado correctamente',
                 'type'    => 'success'
             ]);
             
         }catch (\Exception $e){
-            Custom::error('ProyectoController', 'store', $e);
+            Custom::error('TicketController', 'store', $e);
         }
     }
 
@@ -118,20 +117,26 @@ class ProyectoController extends Controller
     public function edit($id)
     {
         try{
-            $item = Proyecto::findOrFail($id);
+            $item = Ticket::findOrFail($id);
             $usuarios = User::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombres')->get();
-            $tipo_proyectos = TipoProyecto::orderBy('nombre')->get();
-            $estados = Define::getEstados();
+            $proyectos = Proyecto::where('estado', Define::ESTADO_ACTIVO)->orderBy('nombre')->get();
+            $estados = Define::getEstadosTexto();
+            $tickets_user = [];
 
-            return view('proyecto.editar', [
+            foreach ($item->usuarios as $usuario) {
+                $tickets_user[] = $usuario->codigo;
+            }
+
+            return view('ticket.editar', [
                 'item' => $item,
-                'title' => 'Proyecto',
-                'estados' => $estados,
+                'title' => 'Ticket',
                 'usuarios' => $usuarios,
-                'tipo_proyectos' => $tipo_proyectos
+                'proyectos' => $proyectos,
+                'estados' => $estados,
+                'tickets_user' => $tickets_user
             ]);
         }catch (\Exception $e){
-            Custom::error('ProyectoController', 'edit', $e);
+            Custom::error('TicketController', 'edit', $e);
         }
     }
 
@@ -146,7 +151,7 @@ class ProyectoController extends Controller
     {
         try{
             $req = $request->all();
-            $validator = Proyecto::valida($request, $id);
+            $validator = Ticket::valida($request, $id);
             
             if ($validator->fails())
             {
@@ -156,16 +161,16 @@ class ProyectoController extends Controller
                     ->withInput();
             }
 
-            Proyecto::editar($req, $id);
+            Ticket::editar($req, $id);
 
             return redirect()->back()->with([
                 'title'   => 'Exito',
-                'message' => 'Proyecto editado correctamente',
+                'message' => 'Ticket editado correctamente',
                 'type'    => 'success'
             ]);
 
         }catch (\Exception $e){
-            Custom::error('ProyectoController', 'update', $e);
+            Custom::error('TicketController', 'update', $e);
         }
     }
 
@@ -179,14 +184,14 @@ class ProyectoController extends Controller
     {
         try{
 
-            Proyecto::desactivarActivar($id);
+            Ticket::desactivarActivar($id);
 
             return response()->json([
                 'status' => 'success'
             ]);
 
         }catch (\Exception $e){
-            Custom::error('ProyectoController', 'destroy', $e);
+            Custom::error('TicketController', 'destroy', $e);
         }
     }
 }

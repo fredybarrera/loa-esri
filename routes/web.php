@@ -38,6 +38,7 @@ Route::get('/', function () {
 Route::resource('tarea', TareaController::class);
 Route::resource('usuario', UsuarioController::class);
 Route::resource('proyecto', ProyectoController::class);
+Route::resource('ticket', TicketController::class);
 
 Auth::routes();
 

@@ -15,6 +15,13 @@ class Define
     */
     const ESTADO_INACTIVO   = -1;
     const ESTADO_ACTIVO     = 1;
+    /*
+    |--------------------------------------------------------------------------
+    | Estados generales de las tablas en texto
+    |--------------------------------------------------------------------------
+    */
+    const ESTADO_INACTIVO_TEXTO   = 'N';
+    const ESTADO_ACTIVO_TEXTO     = 'S';
    	/*
     |--------------------------------------------------------------------------
     | Perfiles de usuario
@@ -117,6 +124,19 @@ class Define
         return [
             Define::ESTADO_ACTIVO => 'Activo',
             Define::ESTADO_INACTIVO => 'Inactivo'
+        ];
+    }
+
+    /**
+     * Retorna las condiciones para una validación
+     *
+     * @var array
+     */
+    public static function getEstadosTexto(){
+        
+        return [
+            Define::ESTADO_ACTIVO_TEXTO => 'Activo',
+            Define::ESTADO_INACTIVO_TEXTO => 'Inactivo'
         ];
     }
 

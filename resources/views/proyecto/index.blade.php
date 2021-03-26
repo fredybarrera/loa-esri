@@ -20,7 +20,9 @@
     <!-- Javascript -->
     <script>
         $(function() {
-            $('.datatables-demo').dataTable();
+            $('.datatables-demo').dataTable({
+                "order": [[ 0, "desc" ]]
+            });
         });
 
         $(".link-proyecto-activar").on("click", function(){
@@ -79,7 +81,12 @@
         <span class="text-muted font-weight-light">Mantenedores /</span> Iniciativas
     </h4>
     <a href="{{ route('proyecto.create') }}" class="btn btn-info mb-3" role="button">Crear</a>
-
+    @if(session()->has('message'))
+        <div class="alert alert-{{ (session()->get('type') == 'success') ? 'success' : 'danger' }} alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <p>{{ session()->get('message') }}</p>
+        </div>
+    @endif
     <!-- DataTable within card -->
     <div class="card">
         {{-- <h6 class="card-header">Proyectos</h6> --}}
