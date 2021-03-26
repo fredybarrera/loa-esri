@@ -33,7 +33,7 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-4">
-        Editar usuario <span class="text-muted">{{ $item->nom_usuario }}</span>
+        Editar usuario <br /><span class="text-muted">{{ $item->nombres }} {{ $item->apellidos }}</span>
     </h4>
     @if(session()->has('message'))
         <div class="alert alert-{{ (session()->get('type') == 'success') ? 'success' : 'danger' }} alert-dismissible">

@@ -10,7 +10,7 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-4">
-        Editar proyecto <span class="text-muted">{{ $item->nombre }}</span>
+        Editar proyecto <br /><span class="text-muted">{{ $item->nombre }}</span>
     </h4>
     @if(session()->has('message'))
         <div class="alert alert-{{ (session()->get('type') == 'success') ? 'success' : 'danger' }} alert-dismissible">

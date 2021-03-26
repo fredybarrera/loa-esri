@@ -18,7 +18,7 @@
 
 @section('content')
     <h4 class="font-weight-bold py-3 mb-4">
-        Editar ticket <span class="text-muted">{{ $item->descripcion }}</span>
+        Editar ticket <br /><span class="text-muted">{{ $item->descripcion }}</span>
     </h4>
     @if(session()->has('message'))
         <div class="alert alert-{{ (session()->get('type') == 'success') ? 'success' : 'danger' }} alert-dismissible">
