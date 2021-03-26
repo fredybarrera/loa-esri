@@ -93,6 +93,7 @@
                         <th>Tipo proyecto</th>
                         <th>Usuario responsable</th>
                         <th>Estado</th>
+                        <th>Fecha</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -105,6 +106,7 @@
                             <td>{{ $item->tipoProyecto->nombre }}</td>
                             <td>{{ $item->usuario->nombres }} {{ $item->usuario->apellidos }}</td>
                             <td>{{ ($item->estado == App\Define::ESTADO_ACTIVO) ? 'Activo' : 'Inactivo' }}</td>
+                            <td>{{ $item->created_at }}</td>
                             <td class="center">
                                 <a href="{{ route('proyecto.edit', $item->codigo) }}" class="btn btn-sm btn-outline-info" role="button">Editar</a>
                                 @if($item->estado == App\Define::ESTADO_ACTIVO)

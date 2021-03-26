@@ -42,6 +42,11 @@ class Proyecto extends Model
         return $this->belongsTo('App\TipoProyecto', 'tipo_proyecto_id');
     }
 
+    public function getCreatedAtAttribute($date)
+    {
+        return date('Y-m-d H:i:s', strtotime($date));
+    }
+
     public static function valida($request){
 
         $rules = [
